@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -13,7 +13,6 @@
 />
 
 <style>
-  /* --- Базовые стили --- */
   * {
     box-sizing: border-box;
   }
@@ -24,9 +23,9 @@
     background: #080818;
     color: #00fff7;
     overflow-x: hidden;
-    user-select: none; /* чтоб не выделялось при перетаскивании */
+    user-select: none;
   }
-  h1, h2, h3 {
+  h1, h3 {
     text-align: center;
     text-shadow: 0 0 10px #00fff7;
   }
@@ -43,18 +42,6 @@
     margin: 1rem auto 4rem;
     padding: 0 1rem;
   }
-  /* --- Анимированный кибер-дождь на canvas --- */
-  canvas#cyberRain {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100vw;
-    height: 100vh;
-    z-index: -1;
-    pointer-events: none;
-    background: #080818;
-  }
-
-  /* --- Меню --- */
   .menu {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -95,7 +82,7 @@
     background: linear-gradient(45deg, #00fff7, #5500ff);
   }
 
-  /* --- Плавающие кнопки (фиксированы внизу справа) --- */
+  /* Кнопки иконки внизу справа */
   .floating-btn {
     position: fixed;
     bottom: 20px;
@@ -125,8 +112,23 @@
     color: #080818;
     font-size: 1.8rem;
   }
+  #cart-count {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    background: #ff00ff;
+    color: #080818;
+    font-weight: 700;
+    font-size: 0.8rem;
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 
-  /* --- Плавающие окна (свободно перемещаемые) --- */
+  /* Плавающие окна (перетаскиваемые) */
   .floating-window {
     position: fixed;
     width: 320px;
@@ -143,20 +145,16 @@
     color: #00fff7;
     cursor: default;
     user-select: none;
+    display: none;
   }
-  /* Начальные позиции окон */
   #chatbot-window {
     right: 20px;
     bottom: 90px;
-    display: none;
   }
   #cart-window {
     right: 90px;
     bottom: 90px;
-    display: none;
   }
-
-  /* Заголовок окна (зона перетаскивания) */
   .floating-window header {
     background: linear-gradient(45deg, #ff00ff, #9d00ff);
     padding: 12px;
@@ -180,15 +178,12 @@
     cursor: pointer;
     user-select: none;
   }
-
-  /* Содержимое окна */
   .floating-window .content {
     padding: 12px 15px;
     overflow-y: auto;
     flex-grow: 1;
     font-size: 0.95rem;
   }
-  /* Скролл */
   .floating-window .content::-webkit-scrollbar {
     width: 6px;
   }
@@ -197,15 +192,12 @@
     border-radius: 3px;
   }
 
-  /* --- Чат-бот --- */
+  /* Чат */
   #chat-messages {
     margin-bottom: 8px;
   }
   #chat-messages p {
     margin: 6px 0;
-  }
-  #chat-messages p strong {
-    color: #ff00ff;
   }
   #chat-input-area {
     display: flex;
@@ -234,7 +226,7 @@
     background: #9d00ff;
   }
 
-  /* --- Корзина --- */
+  /* Корзина */
   #cart-list {
     max-height: 220px;
     overflow-y: auto;
@@ -278,22 +270,29 @@
     background: linear-gradient(45deg, #00fff7, #5500ff);
   }
 
-  /* --- Звуки кликов --- */
   button:active {
     transform: scale(0.97);
   }
 
-  /* --- Адаптив --- */
   @media (max-width: 420px) {
     .floating-window {
       width: 90vw !important;
     }
   }
+  /* Кибер дождь canvas */
+  canvas#cyberRain {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1;
+    pointer-events: none;
+    background: #080818;
+  }
 </style>
 </head>
 <body>
 
-<!-- Киберпанк дождь (canvas) -->
 <canvas id="cyberRain"></canvas>
 
 <h1>NnnMop</h1>
@@ -303,18 +302,15 @@
   <div class="menu" id="menu"></div>
 </main>
 
-<!-- Плавающая кнопка чат-бота -->
 <div class="floating-btn" id="chatbot-btn" title="Открыть чат">
   <i class="fas fa-robot"></i>
 </div>
 
-<!-- Плавающая кнопка корзины -->
 <div class="floating-btn" id="cart-btn" title="Открыть корзину">
   <i class="fas fa-shopping-cart"></i>
-  <span id="cart-count" style="position:absolute; top:-6px; right:-6px; background:#ff00ff; color:#080818; font-weight:700; font-size:0.8rem; border-radius:50%; width:18px; height:18px; display:flex; align-items:center; justify-content:center;">0</span>
+  <span id="cart-count">0</span>
 </div>
 
-<!-- Окно чат-бота -->
 <section class="floating-window" id="chatbot-window" aria-label="Чат с AI ассистентом">
   <header>🤖 AI Ассистент
     <button class="close-btn" aria-label="Закрыть чат">&times;</button>
@@ -328,7 +324,6 @@
   </div>
 </section>
 
-<!-- Окно корзины -->
 <section class="floating-window" id="cart-window" aria-label="Корзина заказов">
   <header>🛒 Ваша корзина
     <button class="close-btn" aria-label="Закрыть корзину">&times;</button>
@@ -346,7 +341,7 @@
 </section>
 
 <script>
-  // --- Анимация кибер-дождя на canvas ---
+  // Кибер дождь
   (() => {
     const canvas = document.getElementById('cyberRain');
     const ctx = canvas.getContext('2d');
@@ -407,7 +402,7 @@
     animate();
   })();
 
-  // --- Меню ---
+  // Меню и корзина
   const menu = [
     { name: 'Суши-сет', price: 300 },
     { name: 'Пицца Маргарита', price: 200 },
@@ -448,7 +443,7 @@
     }
   });
 
-  // Обновление UI корзины
+  // Обновление корзины
   function updateCartUI() {
     if (cart.length === 0) {
       cartList.innerHTML = '<p>Корзина пуста</p>';
@@ -460,7 +455,6 @@
     cart.forEach((item, idx) => {
       const p = document.createElement('p');
       p.textContent = `${item.name} - ${item.price} NOK`;
-      // Кнопка удалить
       const delBtn = document.createElement('button');
       delBtn.textContent = '×';
       delBtn.title = 'Удалить товар';
@@ -488,27 +482,36 @@
     cartCountSpan.textContent = cart.length;
   }
 
-  // --- Показ и скрытие окон ---
+  // Плавающие окна и кнопки
   const chatbotBtn = document.getElementById('chatbot-btn');
   const chatbotWindow = document.getElementById('chatbot-window');
   const cartBtn = document.getElementById('cart-btn');
   const cartWindow = document.getElementById('cart-window');
 
   chatbotBtn.addEventListener('click', () => {
-    if (chatbotWindow.style.display === 'flex') {
-      chatbotWindow.style.display = 'none';
-    } else {
+    if (chatbotWindow.style.display === 'flex') chatbotWindow.style.display = 'none';
+    else {
       chatbotWindow.style.display = 'flex';
       chatbotWindow.style.zIndex = 1100;
-    }
-  });
-  cartBtn.addEventListener('click', () => {
-    if (cartWindow.style.display === 'flex') {
-      cartWindow.style.display = 'none';
-    } else {
-      cartWindow.style.display = 'flex';
-      cartWindow.style.zIndex = 1100;
+      chatbotWindow.focus();
     }
   });
 
-  // Кнопки закрытия окон
+  cartBtn.addEventListener('click', () => {
+    if (cartWindow.style.display === 'flex') cartWindow.style.display = 'none';
+    else {
+      cartWindow.style.display = 'flex';
+      cartWindow.style.zIndex = 1100;
+      cartWindow.focus();
+    }
+  });
+
+  // Закрытие кнопками в окнах
+  document.querySelectorAll('.floating-window .close-btn').forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.target.closest('.floating-window').style.display = 'none';
+    });
+  });
+
+  // Звуки кликов
+  const clickSound = new Audio('https://cdn.jsdelivr.net/gh/felixrieseberg/mini-sounds/c
