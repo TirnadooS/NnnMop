@@ -1,83 +1,290 @@
 <!DOCTYPE html>
-<html>
+<html lang="ru">
 <head>
-    <title>Мой плеер</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spotify-Like Player</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        :root {
+            --bg-dark: #121212;
+            --bg-light: #f5f5f5;
+            --primary: #1db954;
+            --text-dark: #ffffff;
+            --text-light: #000000;
+        }
+
         body {
             margin: 0;
             padding: 0;
-            font-family: Arial;
-            color: white;
-            background: black;
+            font-family: 'Arial', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-dark);
+            transition: background 0.3s;
         }
-        
-        #video-bg {
+
+        /* Основной контейнер */
+        .container {
+            display: flex;
+            height: 100vh;
+        }
+
+        /* Боковая панель (плейлисты) */
+        .sidebar {
+            width: 250px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        /* Основная область (песни) */
+        .main-content {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        /* Поиск */
+        .search-bar {
+            margin-bottom: 20px;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 10px;
+            border-radius: 20px;
+            border: none;
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-dark);
+        }
+
+        /* Список песен */
+        .song-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .song-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .song-card:hover {
+            transform: scale(1.03);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Плеер */
+        .player {
             position: fixed;
-            top: 0;
+            bottom: 0;
             left: 0;
             width: 100%;
-            height: 100%;
-            object-fit: cover;
-            z-index: -1;
-            opacity: 0.7;
-        }
-        
-        .player {
-            background: rgba(0,0,0,0.5);
-            width: 90%;
-            max-width: 500px;
-            margin: 20px auto;
-            padding: 20px;
-            border-radius: 10px;
-        }
-        
-        .song {
+            background: rgba(0, 0, 0, 0.8);
             padding: 10px;
-            margin: 5px 0;
-            background: rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            z-index: 100;
+        }
+
+        .player-controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .progress-bar {
+            flex: 1;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.2);
+            margin: 0 15px;
+            border-radius: 2px;
             cursor: pointer;
         }
-        
-        .song:hover {
-            background: rgba(255,255,255,0.2);
+
+        .progress {
+            height: 100%;
+            background: var(--primary);
+            width: 0%;
+            border-radius: 2px;
         }
-        
-        audio {
-            width: 100%;
-            margin-top: 15px;
+
+        /* Темный/светлый режим */
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: var(--text-dark);
+            padding: 10px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        /* Адаптивность */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+            .sidebar {
+                width: 100%;
+                height: auto;
+            }
+            .song-list {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Видеофон (замените video_1.mp4 на свой файл) -->
-    <video autoplay muted loop id="video-bg">
-        <source src="video_1.mp4" type="video/mp4">
-    </video>
-    
-    <div class="player">
-        <h2>Мой плейлист</h2>
-        
-        <!-- Список песен -->
-        <div class="song" onclick="play(1)">Песня 1</div>
-        <div class="song" onclick="play(2)">Песня 2</div>
-        <div class="song" onclick="play(3)">Песня 3</div>
-        <div class="song" onclick="play(4)">Песня 4</div>
-        <div class="song" onclick="play(5)">Песня 5</div>
-        <div class="song" onclick="play(6)">Песня 6</div>
-        <div class="song" onclick="play(7)">Песня 7</div>
-        <div class="song" onclick="play(8)">Песня 8</div>
-        <div class="song" onclick="play(9)">Песня 9</div>
-        <div class="song" onclick="play(10)">Песня 10</div>
-        
-        <!-- Аудиоплеер -->
-        <audio id="audio" controls></audio>
+    <button class="theme-toggle" onclick="toggleTheme()">
+        <i class="fas fa-moon"></i>
+    </button>
+
+    <div class="container">
+        <!-- Боковая панель (плейлисты) -->
+        <div class="sidebar">
+            <h2>Плейлисты</h2>
+            <ul id="playlists">
+                <!-- Плейлисты будут добавляться через JS -->
+            </ul>
+            <button onclick="createPlaylist()">+ Создать плейлист</button>
+        </div>
+
+        <!-- Основной контент -->
+        <div class="main-content">
+            <div class="search-bar">
+                <input type="text" id="search-input" placeholder="Поиск...">
+            </div>
+
+            <div class="song-list" id="song-list">
+                <!-- Песни будут добавляться через JS -->
+            </div>
+        </div>
     </div>
 
+    <!-- Аудиоплеер -->
+    <div class="player">
+        <div class="player-controls">
+            <button onclick="prevSong()"><i class="fas fa-step-backward"></i></button>
+            <button onclick="togglePlay()"><i class="fas fa-play"></i></button>
+            <button onclick="nextSong()"><i class="fas fa-step-forward"></i></button>
+            <div class="progress-bar" onclick="seek(event)">
+                <div class="progress" id="progress"></div>
+            </div>
+            <span id="current-time">0:00</span>
+            <input type="range" id="volume" min="0" max="1" step="0.1" value="0.7">
+        </div>
+    </div>
+
+    <audio id="audio"></audio>
+
     <script>
-        function play(num) {
-            document.getElementById("audio").src = "music_" + num + ".mp3";
-            document.getElementById("audio").play();
+        // ===== БАЗА ДАННЫХ =====
+        let songs = [
+            { id: 1, title: "Cyber Dreams", artist: "Neon Wave", src: "music_1.mp3" },
+            { id: 2, title: "Electric Love", artist: "Synth Masters", src: "music_2.mp3" },
+            // Добавьте остальные песни...
+        ];
+
+        let playlists = [
+            { id: 1, name: "Любимые треки", songs: [1, 2] },
+            { id: 2, name: "Для работы", songs: [3, 4] }
+        ];
+
+        // ===== ОСНОВНОЙ КОД =====
+        let currentSongIndex = 0;
+        const audio = document.getElementById('audio');
+        const progress = document.getElementById('progress');
+        const currentTimeEl = document.getElementById('current-time');
+
+        // Загрузка песен
+        function loadSongs() {
+            const songList = document.getElementById('song-list');
+            songList.innerHTML = '';
+
+            songs.forEach((song, index) => {
+                const songCard = document.createElement('div');
+                songCard.className = 'song-card';
+                songCard.innerHTML = `
+                    <h3>${song.title}</h3>
+                    <p>${song.artist}</p>
+                `;
+                songCard.onclick = () => playSong(index);
+                songList.appendChild(songCard);
+            });
         }
+
+        // Воспроизведение песни
+        function playSong(index) {
+            currentSongIndex = index;
+            audio.src = songs[index].src;
+            audio.play();
+            updatePlayer();
+        }
+
+        // Обновление прогресса
+        audio.ontimeupdate = () => {
+            const percent = (audio.currentTime / audio.duration) * 100;
+            progress.style.width = `${percent}%`;
+            currentTimeEl.textContent = formatTime(audio.currentTime);
+        };
+
+        // Перемотка
+        function seek(e) {
+            const percent = e.offsetX / e.target.offsetWidth;
+            audio.currentTime = percent * audio.duration;
+        }
+
+        // Форматирование времени
+        function formatTime(seconds) {
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+        }
+
+        // Управление плеером
+        function togglePlay() {
+            if (audio.paused) {
+                audio.play();
+            } else {
+                audio.pause();
+            }
+        }
+
+        function prevSong() {
+            currentSongIndex = (currentSongIndex - 1 + songs.length) % songs.length;
+            playSong(currentSongIndex);
+        }
+
+        function nextSong() {
+            currentSongIndex = (currentSongIndex + 1) % songs.length;
+            playSong(currentSongIndex);
+        }
+
+        // Поиск
+        document.getElementById('search-input').addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            const filteredSongs = songs.filter(song => 
+                song.title.toLowerCase().includes(searchTerm) || 
+                song.artist.toLowerCase().includes(searchTerm)
+            );
+            renderSongs(filteredSongs);
+        });
+
+        // Темный/светлый режим
+        function toggleTheme() {
+            document.body.classList.toggle('light-theme');
+        }
+
+        // Инициализация
+        loadSongs();
+        playSong(0);
     </script>
 </body>
 </html>
