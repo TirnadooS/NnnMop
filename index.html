@@ -54,8 +54,14 @@
             }
         }
 
-        /* Остальные стили из предыдущего кода... */
-        /* [Вставьте сюда все предыдущие CSS-стили] */
+        /* --- ВСТАВЬТЕ СЮДА ВСЕ ПРЕДЫДУЩИЕ CSS-СТИЛИ ДЛЯ МЕНЮ, НАВИГАЦИИ И Т.Д. --- */
+        /* Пример: */
+        /*
+        .header { ... }
+        .nav { ... }
+        .menu-item { ... }
+        */
+        /* ------------------------------------------------------------------ */
 
         /* Форма заказа */
         .order-form {
@@ -138,7 +144,7 @@
             border: 1px solid var(--neon-purple);
             border-radius: 10px;
             overflow: hidden;
-            display: none;
+            display: none; /* Hidden by default */
             flex-direction: column;
             z-index: 1000;
             backdrop-filter: blur(10px);
@@ -156,6 +162,11 @@
             flex: 1;
             padding: 15px;
             overflow-y: auto;
+            color: white; /* Ensure text is visible */
+        }
+
+        .chat-messages p {
+            margin-bottom: 8px; /* Spacing for chat messages */
         }
 
         .chat-input {
@@ -169,6 +180,7 @@
             background: rgba(255, 255, 255, 0.1);
             border: 1px solid var(--neon-blue);
             color: white;
+            font-family: 'Rajdhani', sans-serif; /* Consistent font */
         }
 
         .chat-input button {
@@ -177,6 +189,11 @@
             border: none;
             padding: 0 15px;
             cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .chat-input button:hover {
+            background: var(--neon-pink); /* Hover effect for chat button */
         }
 
         /* AI-рекомендации */
@@ -186,13 +203,11 @@
             padding: 15px;
             margin: 20px 0;
             font-style: italic;
+            color: lightcyan; /* Ensure visibility */
         }
     </style>
 </head>
 <body>
-    <!-- [Вставьте сюда весь предыдущий HTML-код] -->
-
-    <!-- Форма заказа -->
     <div class="container">
         <div class="order-form">
             <h3><i class="fas fa-credit-card"></i> BESTILLING</h3>
@@ -203,7 +218,6 @@
         </div>
     </div>
 
-    <!-- Чат-бот -->
     <div class="chatbot" id="chatbot-trigger">
         <i class="fas fa-robot"></i>
     </div>
@@ -225,52 +239,79 @@
     </div>
 
     <script>
-        // [Вставьте сюда предыдущий JavaScript код]
+        // --- ВСТАВЬТЕ СЮДА ВЕСЬ ПРЕДЫДУЩИЙ JAVASCRIPT КОД ДЛЯ КОРЗИНЫ, МЕНЮ И Т.Д. ---
+        // Пример:
+        // let cart = [];
+        // function addToCart(item) { ... }
+        // function updateCart() { ... }
+        // ------------------------------------------------------------------
+
+        // --- IMPORTANT: Placeholder for your 'cart' array and 'updateCart' function ---
+        // You MUST define these based on your existing shopping cart logic.
+        // If they are not defined, the `submitOrder` function will not work correctly.
+        let cart = []; // Example: initialize an empty cart array
+        
+        // Example: A basic updateCart function (you'll need to expand this based on your actual cart display)
+        function updateCart() {
+            // This function should update the display of your shopping cart.
+            // For example, update item counts, total price, etc.
+            console.log("Cart updated:", cart);
+            // You might have elements like:
+            // document.getElementById('cart-items-count').textContent = cart.length;
+            // document.getElementById('cart-total-price').textContent = cart.reduce((sum, item) => sum + item.price, 0);
+        }
+        // --- End of placeholder ---
+
 
         // Форма заказа
         function submitOrder() {
-            const name = document.getElementById("name").value;
-            const address = document.getElementById("address").value;
+            const nameInput = document.getElementById("name");
+            const addressInput = document.getElementById("address");
+            const name = nameInput.value;
+            const address = addressInput.value;
             
             if (!name || !address) {
-                alert("Vennligst fyll ut navn og adresse");
+                document.getElementById("order-status").innerHTML = `<p style="color: red;">Vennligst fyll ut navn og adresse!</p>`;
                 return;
             }
             
             if (cart.length === 0) {
-                alert("Handlekurven er tom");
+                document.getElementById("order-status").innerHTML = `<p style="color: orange;">Handlekurven er tom!</p>`;
                 return;
             }
 
             const total = cart.reduce((sum, item) => sum + item.price, 0);
             document.getElementById("order-status").innerHTML = `
                 <p style="color: var(--neon-blue)">Takk, ${name}!</p>
-                <p>Din bestilling til ${address} er bekreftet.</p>
-                <p>${cart.length} varer for ${total} NOK</p>
+                <p>Din bestilling til <strong>${address}</strong> er bekreftet.</p>
+                <p>Antall varer: <strong>${cart.length}</strong> for <strong>${total} NOK</strong></p>
                 <p><i class="fas fa-motorcycle"></i> Estimert levering: 30 min</p>
             `;
 
-            // Очистка корзины
-            cart = [];
-            updateCart();
+            // Очистка корзины и полей формы
+            cart = []; // Reset the cart
+            updateCart(); // Update the cart display to show it's empty
+            nameInput.value = ''; // Clear name input
+            addressInput.value = ''; // Clear address input
         }
 
         // Чат-бот
         const chatbotTrigger = document.getElementById('chatbot-trigger');
         const chatWindow = document.getElementById('chat-window');
+        const chatMessages = document.getElementById('chat-messages'); // Get chat messages div
 
         chatbotTrigger.addEventListener('click', () => {
             chatWindow.style.display = chatWindow.style.display === 'flex' ? 'none' : 'flex';
         });
 
         function sendMessage() {
-            const input = document.getElementById('user-input');
-            const messages = document.getElementById('chat-messages');
+            const userInput = document.getElementById('user-input');
+            const userMessage = userInput.value.trim();
             
-            if (input.value.trim() === '') return;
+            if (userMessage === '') return;
             
             // Пользовательское сообщение
-            messages.innerHTML += `<p><strong>Du:</strong> ${input.value}</p>`;
+            chatMessages.innerHTML += `<p><strong>Du:</strong> ${userMessage}</p>`;
             
             // Ответ бота
             setTimeout(() => {
@@ -278,15 +319,17 @@
                     "Jeg anbefaler NEON PEPPERONI XTREME med ekstra jalapeños!",
                     "Har du prøvd vår nye CYBER MOONRISE-drink?",
                     "Leveringstid er vanligvis 30-45 minutter.",
-                    "Vi har spesialtilbud på GOLDEN TRUFFLE BURGER i dag!"
+                    "Vi har spesialtilbud på GOLDEN TRUFFLE BURGER i dag!",
+                    "Vi aksepterer alle standard kredittkort og kryptovalutaer."
                 ];
                 const randomResponse = responses[Math.floor(Math.random() * responses.length)];
-                messages.innerHTML += `<p><strong>AI:</strong> ${randomResponse}</p>`;
-                messages.scrollTop = messages.scrollHeight;
-            }, 1000);
+                chatMessages.innerHTML += `<p><strong>AI:</strong> ${randomResponse}</p>`;
+                // Scroll to the bottom of the chat messages
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }, 1000); // 1 second delay for bot response
             
-            input.value = '';
-            messages.scrollTop = messages.scrollHeight;
+            userInput.value = ''; // Clear input field
+            chatMessages.scrollTop = chatMessages.scrollHeight; // Scroll to bottom immediately after user message
         }
 
         // AI-рекомендации при загрузке
@@ -294,11 +337,15 @@
             const recommendations = [
                 "I dag anbefaler vi: QUANTUM MARGHERITA med ekstra mozzarella!",
                 "Spesialtilbud: 20% rabatt på alle burgere i dag!",
-                "Prøv vår nye SYNTH-WATER med elektrolytter for ekstra energi!"
+                "Prøv vår nye SYNTH-WATER med elektrolytter for ekstra energi!",
+                "Ikke glem å sjekke våre daglige tilbud under 'DAGENS DEAL'!"
             ];
             const randomRec = recommendations[Math.floor(Math.random() * recommendations.length)];
-            document.querySelector('.ai-recommendation').innerHTML = 
-                `<strong><i class="fas fa-star"></i> AI ANBEFALER:</strong> ${randomRec}`;
+            const aiRecommendationElement = document.querySelector('.ai-recommendation');
+            if (aiRecommendationElement) { // Check if the element exists
+                aiRecommendationElement.innerHTML = 
+                    `<strong><i class="fas fa-star"></i> AI ANBEFALER:</strong> ${randomRec}`;
+            }
         });
     </script>
 </body>
