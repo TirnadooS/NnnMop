@@ -1,5 +1,4 @@
-<!DOCTYPE html>
-<html lang="no">
+<!DOCTYPE html><html lang="no">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,161 +7,273 @@
     <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700&family=Teko:wght@400;600&family=Orbitron:wght@700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --neon-blue: #0066ff;
-            --neon-pink: #9900ff;
-            --neon-purple: #5500ff;
+            --neon-blue: #00f3ff;
+            --neon-pink: #ff00ff;
+            --neon-purple: #9d00ff;
             --dark-bg: #0a0a1a;
-            --card-bg: rgba(15, 5, 30, 0.9);
+            --card-bg: rgba(20, 10, 40, 0.8);
             --text-dark: #e0e0ff;
+        }* {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Rajdhani', sans-serif;
+        background: var(--dark-bg);
+        color: white;
+        overflow-x: hidden;
+        min-height: 100vh;
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+        position: relative;
+    }
+
+    @media (max-width: 768px) {
+        .menu-grid {
+            grid-template-columns: 1fr !important;
         }
 
-        /* [Остальные CSS-стили из предыдущего примера] */
-
-        /* Чат-бот (тёмная версия) */
-        .chatbot {
-            background: var(--neon-purple);
-            box-shadow: 0 0 20px rgba(85, 0, 255, 0.7);
+        .floating-cart {
+            width: 100% !important;
+            right: -100% !important;
         }
 
-        .chat-window {
-            background: var(--card-bg);
-            border: 1px solid var(--neon-purple);
+        .main-title {
+            font-size: 2.5rem !important;
         }
+    }
 
-        .chat-header {
-            background: rgba(85, 0, 255, 0.4);
-            color: var(--neon-blue);
-        }
+    .order-form {
+        background: rgba(10, 5, 20, 0.9);
+        border: 1px solid var(--neon-purple);
+        padding: 20px;
+        border-radius: 8px;
+        margin-top: 30px;
+        backdrop-filter: blur(5px);
+    }
 
-        /* AI-рекомендации */
-        .ai-recommendation {
-            background: rgba(0, 102, 255, 0.15);
-            border-left: 3px solid var(--neon-blue);
-            color: var(--text-dark);
-        }
-    </style>
+    .order-form h3 {
+        color: var(--neon-blue);
+        margin-bottom: 15px;
+        font-family: 'Teko', sans-serif;
+        font-size: 1.8rem;
+    }
+
+    .order-form input {
+        width: 100%;
+        padding: 12px;
+        margin-bottom: 15px;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid var(--neon-blue);
+        color: white;
+        font-family: 'Rajdhani', sans-serif;
+    }
+
+    .order-form button {
+        background: linear-gradient(45deg, var(--neon-pink), var(--neon-purple));
+        color: white;
+        border: none;
+        padding: 12px 25px;
+        font-family: 'Rajdhani', sans-serif;
+        font-weight: 700;
+        cursor: pointer;
+        width: 100%;
+        transition: all 0.3s;
+    }
+
+    .order-form button:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(255, 0, 255, 0.4);
+    }
+
+    .chatbot {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        width: 60px;
+        height: 60px;
+        background: var(--neon-purple);
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        z-index: 999;
+        box-shadow: 0 0 20px rgba(85, 0, 255, 0.7);
+        transition: all 0.3s;
+    }
+
+    .chatbot:hover {
+        transform: scale(1.1);
+    }
+
+    .chatbot i {
+        font-size: 1.5rem;
+        color: black;
+    }
+
+    .chat-window {
+        position: fixed;
+        bottom: 90px;
+        right: 20px;
+        width: 300px;
+        height: 400px;
+        background: var(--card-bg);
+        border: 1px solid var(--neon-purple);
+        border-radius: 10px;
+        overflow: hidden;
+        display: none;
+        flex-direction: column;
+        z-index: 1000;
+        backdrop-filter: blur(10px);
+    }
+
+    .chat-header {
+        padding: 15px;
+        background: rgba(85, 0, 255, 0.4);
+        color: var(--neon-blue);
+        font-family: 'Teko', sans-serif;
+        font-size: 1.3rem;
+    }
+
+    .chat-messages {
+        flex: 1;
+        padding: 15px;
+        overflow-y: auto;
+        color: var(--text-dark);
+    }
+
+    .chat-input {
+        padding: 10px;
+        display: flex;
+    }
+
+    .chat-input input {
+        flex: 1;
+        padding: 10px;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid var(--neon-blue);
+        color: white;
+    }
+
+    .chat-input button {
+        background: var(--neon-blue);
+        color: black;
+        border: none;
+        padding: 0 15px;
+        cursor: pointer;
+    }
+
+    .ai-recommendation {
+        background: rgba(0, 102, 255, 0.15);
+        border-left: 3px solid var(--neon-blue);
+        padding: 15px;
+        margin: 20px 0;
+        font-style: italic;
+        color: var(--text-dark);
+    }
+</style>
+
 </head>
 <body>
-    <!-- [Весь HTML из предыдущего примера] -->
+    <div class="container">
+        <div class="order-form">
+            <h3><i class="fas fa-credit-card"></i> BESTILLING</h3>
+            <input type="text" id="name" placeholder="Ditt navn">
+            <input type="text" id="address" placeholder="Leveringsadresse">
+            <button onclick="submitOrder()"><i class="fas fa-paper-plane"></i> BEKREFT BESTILLING</button>
+            <p id="order-status" style="margin-top: 15px;"></p>
+        </div>
+    </div><div class="chatbot" id="chatbot-trigger">
+    <i class="fas fa-robot"></i>
+</div>
 
-    <!-- Чат-бот -->
-    <div class="chatbot" id="chatbot-trigger">
-        <i class="fas fa-robot"></i>
+<div class="chat-window" id="chat-window">
+    <div class="chat-header">
+        <i class="fas fa-robot"></i> CYBER-ASSISTENT
     </div>
-
-    <div class="chat-window" id="chat-window">
-        <div class="chat-header">
-            <i class="fas fa-robot"></i> CYBER-ASSISTENT
+    <div class="chat-messages" id="chat-messages">
+        <div class="ai-recommendation">
+            <strong><i class="fas fa-star"></i> AI ANBEFALER:</strong> Prøv vår signaturrett QUANTUM MARGHERITA med ekstra neon-saus!
         </div>
-        <div class="chat-messages" id="chat-messages">
-            <div class="ai-recommendation">
-                <strong><i class="fas fa-star"></i> AI ANBEFALER:</strong> Prøv vår signaturrett QUANTUM MARGHERITA med ekstra neon-saus!
-            </div>
-            <p>Hei! Jeg er din digitale assistent. Spør om anbefalinger eller leveringstider.</p>
-        </div>
-        <div class="chat-input">
-            <input type="text" id="user-input" placeholder="Skriv melding...">
-            <button onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button>
-        </div>
+        <p>Hei! Jeg er din digitale assistent. Spør om anbefalinger eller leveringstider.</p>
     </div>
+    <div class="chat-input">
+        <input type="text" id="user-input" placeholder="Skriv melding...">
+        <button onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button>
+    </div>
+</div>
 
-    <script>
-        // Корзина (исправленная версия)
-        let cart = [];
-        
-        function updateCart() {
-            const cartItems = document.getElementById('cart-items');
-            const cartTotal = document.getElementById('cart-total');
-            const cartCount = document.querySelector('.cart-count');
-            
-            cartItems.innerHTML = '';
-            let total = 0;
-            
-            cart.forEach(item => {
-                const li = document.createElement('li');
-                li.textContent = `${item.name} - ${item.price} NOK`;
-                cartItems.appendChild(li);
-                total += item.price;
-            });
-            
-            cartTotal.textContent = total;
-            cartCount.textContent = cart.length;
+<script>
+    let cart = [];
+
+    function updateCart() {
+        // если будет корзина - тут обновление
+    }
+
+    function submitOrder() {
+        const name = document.getElementById("name").value;
+        const address = document.getElementById("address").value;
+
+        if (!name || !address) {
+            alert("Vennligst fyll ut navn og adresse");
+            return;
         }
 
-        // Чат-бот
-        const chatbotTrigger = document.getElementById('chatbot-trigger');
-        const chatWindow = document.getElementById('chat-window');
-        
-        chatbotTrigger.addEventListener('click', () => {
-            chatWindow.style.display = chatWindow.style.display === 'flex' ? 'none' : 'flex';
-        });
+        if (cart.length === 0) {
+            alert("Handlekurven er tom");
+            return;
+        }
 
-        function sendMessage() {
-            const input = document.getElementById('user-input');
-            const messages = document.getElementById('chat-messages');
-            
-            if (input.value.trim() === '') return;
-            
-            // Пользовательское сообщение
-            messages.innerHTML += `<p><strong>Du:</strong> ${input.value}</p>`;
-            
-            // Ответ AI
-            setTimeout(() => {
-                const responses = [
-                    "Anbefaler NEON PEPPERONI XTREME med ekstra jalapeños!",
-                    "Leveringstid: 30-45 minutter til din lokasjon.",
-                    "Spesialtilbud i dag: 20% rabatt på burgere!",
-                    "Vår CYBER MOONRISE-drink er perfekt til din pizza."
-                ];
-                const randomResponse = responses[Math.floor(Math.random() * responses.length)];
-                messages.innerHTML += `<p><strong>AI:</strong> ${randomResponse}</p>`;
-                messages.scrollTop = messages.scrollHeight;
-            }, 800);
-            
-            input.value = '';
+        const total = cart.reduce((sum, item) => sum + item.price, 0);
+        document.getElementById("order-status").innerHTML = `
+            <p style="color: var(--neon-blue)">Takk, ${name}!</p>
+            <p>Din bestilling til ${address} er bekreftet.</p>
+            <p>${cart.length} varer for ${total} NOK</p>
+            <p><i class="fas fa-motorcycle"></i> Estimert levering: 30 min</p>
+        `;
+
+        cart = [];
+        updateCart();
+    }
+
+    const chatbotTrigger = document.getElementById('chatbot-trigger');
+    const chatWindow = document.getElementById('chat-window');
+
+    chatbotTrigger.addEventListener('click', () => {
+        chatWindow.style.display = chatWindow.style.display === 'flex' ? 'none' : 'flex';
+    });
+
+    function sendMessage() {
+        const input = document.getElementById('user-input');
+        const messages = document.getElementById('chat-messages');
+
+        if (input.value.trim() === '') return;
+
+        messages.innerHTML += `<p><strong>Du:</strong> ${input.value}</p>`;
+
+        setTimeout(() => {
+            const responses = [
+                "Anbefaler NEON PEPPERONI XTREME med ekstra jalapeños!",
+                "Leveringstid: 30-45 minutter til din lokasjon.",
+                "Spesialtilbud i dag: 20% rabatt på burgere!",
+                "Vår CYBER MOONRISE-drink er perfekt til din pizza."
+            ];
+            const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+            messages.innerHTML += `<p><strong>AI:</strong> ${randomResponse}</p>`;
             messages.scrollTop = messages.scrollHeight;
-        }
+        }, 800);
 
-        // Инициализация
-        document.querySelectorAll('.add-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const item = {
-                    name: this.dataset.name,
-                    price: parseInt(this.dataset.price)
-                };
-                cart.push(item);
-                updateCart();
-                
-                // Анимация
-                this.classList.add('pulse');
-                setTimeout(() => this.classList.remove('pulse'), 500);
-            });
-        });
+        input.value = '';
+        messages.scrollTop = messages.scrollHeight;
+    }
+</script>
 
-        // Форма заказа
-        function submitOrder() {
-            const name = document.getElementById('name').value;
-            const address = document.getElementById('address').value;
-            
-            if (!name || !address) {
-                alert('Vennligst fyll ut alle felter');
-                return;
-            }
-            
-            if (cart.length === 0) {
-                alert('Handlekurven er tom');
-                return;
-            }
-            
-            document.getElementById('order-status').innerHTML = `
-                <p style="color: var(--neon-blue)">Takk, ${name}!</p>
-                <p>Din bestilling på ${cart.reduce((sum, item) => sum + item.price, 0)} NOK er registrert.</p>
-                <p>Levering til: ${address}</p>
-            `;
-            
-            cart = [];
-            updateCart();
-        }
-    </script>
 </body>
 </html>
