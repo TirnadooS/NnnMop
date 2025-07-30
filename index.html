@@ -1,37 +1,52 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>NnnMop - Cyberpunk Food Terminal</title>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet" />
   <style>
+    /* Базовые стили */
     body {
-      font-family: 'Orbitron', sans-serif;
-      background: url('https://i.ibb.co/g39FvsB/cyber-rain.gif') no-repeat center center fixed;
-      background-size: cover;
-      color: #00fff7;
       margin: 0;
-      padding: 1em;
+      font-family: 'Orbitron', sans-serif;
+      color: #00fff7;
+      background: #0f0f0f;
+      overflow-x: hidden;
+    }
+    /* Киберпанк дождь — фон */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: url('https://i.ibb.co/g39FvsB/cyber-rain.gif') center center / cover no-repeat;
+      opacity: 0.25;
+      pointer-events: none;
+      z-index: -1;
     }
     h1 {
       text-align: center;
       font-size: 2.5em;
       color: #00fff7;
       text-shadow: 0 0 8px #00fff7;
+      margin-top: 1rem;
     }
     h3 {
       text-align: center;
       color: #ff00ff;
       font-weight: 400;
-      margin-top: -0.5em;
-      margin-bottom: 1.5em;
+      margin: 0.2em 0 1.5em;
       text-shadow: 0 0 6px #ff00ff;
     }
     .menu {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
       gap: 1em;
-      margin-bottom: 2em;
+      max-width: 900px;
+      margin: 0 auto 2em;
+      padding: 0 1em;
     }
     .item {
       background: rgba(15, 15, 15, 0.8);
@@ -50,17 +65,31 @@
       cursor: pointer;
       border-radius: 6px;
       font-weight: bold;
+      transition: background 0.3s ease;
     }
-    #cart, #order, #chat {
-      max-width: 500px;
+    .item button:hover {
+      background: #cc00cc;
+    }
+    #cart {
+      max-width: 400px;
       margin: 0 auto 2em;
       background: rgba(24, 24, 24, 0.9);
       padding: 1em;
       border-radius: 12px;
       border: 1px solid #00fff7;
       box-shadow: 0 0 8px rgba(0, 255, 255, 0.2);
+      font-size: 1rem;
     }
-    #order input, #order button, #chat input, #chat button {
+    #order {
+      max-width: 400px;
+      margin: 0 auto 4em;
+      background: rgba(24, 24, 24, 0.9);
+      padding: 1em;
+      border-radius: 12px;
+      border: 1px solid #00fff7;
+      box-shadow: 0 0 8px rgba(0, 255, 255, 0.2);
+    }
+    #order input, #order button {
       width: 100%;
       margin: 0.5em 0;
       padding: 0.7em;
@@ -68,29 +97,150 @@
       background: #0f0f0f;
       color: #fff;
       border-radius: 6px;
+      font-size: 1rem;
     }
-    #order button, #chat button {
+    #order button {
       background: #00fff7;
       color: #000;
       font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    #order button:hover {
+      background: #00cccc;
+    }
+
+    /* Плавающий чат-бот и AI ассистент */
+    #chatbot-trigger {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #00fff7;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      box-shadow: 0 0 20px #00fff7;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1001;
+      transition: transform 0.3s ease;
+    }
+    #chatbot-trigger:hover {
+      transform: scale(1.1);
+    }
+    #chatbot-trigger i {
+      font-size: 2rem;
+      color: #000;
+    }
+    #chat-window {
+      position: fixed;
+      bottom: 90px;
+      right: 20px;
+      width: 320px;
+      max-height: 450px;
+      background: rgba(20, 10, 40, 0.95);
+      border-radius: 12px;
+      border: 1px solid #ff00ff;
+      box-shadow: 0 0 15px #ff00ff;
+      display: none;
+      flex-direction: column;
+      z-index: 1000;
+      overflow: hidden;
+      backdrop-filter: blur(10px);
+    }
+    #chat-header {
+      background: #ff00ff;
+      color: #00fff7;
+      padding: 10px 15px;
+      font-weight: bold;
+      font-size: 1.2rem;
+      text-align: center;
+      user-select: none;
+    }
+    #chat-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 10px 15px;
+      color: #00fff7;
+      font-size: 0.9rem;
+    }
+    #chat-input-area {
+      display: flex;
+      border-top: 1px solid #ff00ff;
+      padding: 10px 15px;
+      background: rgba(30, 10, 60, 0.9);
+    }
+    #chat-input {
+      flex: 1;
+      padding: 8px;
+      font-size: 1rem;
+      border-radius: 6px;
+      border: 1px solid #00fff7;
+      background: #0f0f0f;
+      color: #00fff7;
+      outline: none;
+    }
+    #chat-send-btn {
+      margin-left: 8px;
+      background: #ff00ff;
+      border: none;
+      color: #00fff7;
+      font-weight: bold;
+      padding: 8px 15px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    #chat-send-btn:hover {
+      background: #cc00cc;
+    }
+    /* Скролл внутри чата */
+    #chat-messages::-webkit-scrollbar {
+      width: 6px;
+    }
+    #chat-messages::-webkit-scrollbar-thumb {
+      background-color: #ff00ff;
+      border-radius: 3px;
     }
   </style>
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </head>
 <body>
-  <audio autoplay loop>
-    <source src="https://files.catbox.moe/m2ub4y.mp3" type="audio/mpeg">
-  </audio>  <h1>NnnMop</h1>
-  <h3>Cyberpunk Food Terminal</h3>  <div class="menu" id="menu"></div>  <div id="cart"></div>  <form id="order">
+  <h1>NnnMop</h1>
+  <h3>Cyberpunk Food Terminal</h3>
+
+  <div class="menu" id="menu"></div>
+
+  <div id="cart"><h3>Корзина</h3><p>Пусто</p></div>
+
+  <form id="order">
     <input type="text" placeholder="Ваше имя" required />
     <input type="text" placeholder="Адрес доставки" required />
     <input type="tel" placeholder="Телефон" required />
     <button type="submit">Отправить заказ</button>
-  </form>  <div id="chat">
-    <h3>🤖 AI Ассистент</h3>
-    <div id="chat-log" style="max-height: 200px; overflow-y: auto; font-size: 0.9em;"></div>
-    <input type="text" id="user-input" placeholder="Спросите что-нибудь..." />
-    <button onclick="sendMessage()">Отправить</button>
-  </div>  <script>
+  </form>
+
+  <!-- Кнопка вызова чат-бота -->
+  <div id="chatbot-trigger" title="Открыть чат-бот">
+    <i class="fas fa-robot"></i>
+  </div>
+
+  <!-- Окно чат-бота -->
+  <div id="chat-window" role="region" aria-label="Чат с AI ассистентом">
+    <div id="chat-header">🤖 AI Ассистент</div>
+    <div id="chat-messages">
+      <p><em>Привет! Я ваш цифровой помощник. Задайте вопрос.</em></p>
+    </div>
+    <div id="chat-input-area">
+      <input id="chat-input" type="text" placeholder="Напишите сообщение..." />
+      <button id="chat-send-btn" aria-label="Отправить сообщение">Отправить</button>
+    </div>
+  </div>
+
+  <script>
+    // Меню товаров
     const menu = [
       { name: 'Суши-сет', price: 300 },
       { name: 'Пицца Маргарита', price: 200 },
@@ -104,6 +254,7 @@
 
     let cart = [];
 
+    // Создаем карточки меню
     menu.forEach((item, index) => {
       const div = document.createElement('div');
       div.className = 'item';
@@ -111,45 +262,87 @@
       menuDiv.appendChild(div);
     });
 
+    // Добавить товар в корзину
     function addToCart(index) {
       cart.push(menu[index]);
       updateCart();
     }
 
+    // Обновить отображение корзины
     function updateCart() {
+      if (cart.length === 0) {
+        cartDiv.innerHTML = '<h3>Корзина</h3><p>Пусто</p>';
+        return;
+      }
       cartDiv.innerHTML = '<h3>Корзина</h3>' +
         cart.map(item => `<p>${item.name} - ${item.price} NOK</p>`).join('') +
-        `<p><strong>Итого:</strong> ${cart.reduce((s, i) => s + i.price, 0)} NOK</p>`;
+        `<p><strong>Итого:</strong> ${cart.reduce((sum, item) => sum + item.price, 0)} NOK</p>`;
     }
 
-    orderForm.addEventListener('submit', (e) => {
+    // Обработка отправки формы заказа
+    orderForm.addEventListener('submit', e => {
       e.preventDefault();
+      if (cart.length === 0) {
+        alert('Корзина пуста! Добавьте товар перед заказом.');
+        return;
+      }
       alert('Спасибо за заказ! Мы свяжемся с вами в ближайшее время.');
       cart = [];
       updateCart();
       orderForm.reset();
     });
 
+    // Чат-бот логика
+    const chatbotTrigger = document.getElementById('chatbot-trigger');
+    const chatWindow = document.getElementById('chat-window');
+    const chatMessages = document.getElementById('chat-messages');
+    const chatInput = document.getElementById('chat-input');
+    const chatSendBtn = document.getElementById('chat-send-btn');
+
+    chatbotTrigger.addEventListener('click', () => {
+      if (chatWindow.style.display === 'flex') {
+        chatWindow.style.display = 'none';
+      } else {
+        chatWindow.style.display = 'flex';
+        chatInput.focus();
+      }
+    });
+
+    chatSendBtn.addEventListener('click', sendMessage);
+    chatInput.addEventListener('keydown', e => {
+      if (e.key === 'Enter') {
+        sendMessage();
+      }
+    });
+
     function sendMessage() {
-      const input = document.getElementById('user-input');
-      const log = document.getElementById('chat-log');
-      const userMessage = input.value.trim();
-      if (!userMessage) return;
-      log.innerHTML += `<p><strong>Вы:</strong> ${userMessage}</p>`;
-      const reply = generateAIReply(userMessage);
+      const msg = chatInput.value.trim();
+      if (!msg) return;
+      addChatMessage('Вы', msg);
+      chatInput.value = '';
+
+      // Ответ ИИ (заглушка)
       setTimeout(() => {
-        log.innerHTML += `<p><strong>ИИ:</strong> ${reply}</p>`;
-        log.scrollTop = log.scrollHeight;
-      }, 600);
-      input.value = '';
+        const reply = generateAIReply(msg);
+        addChatMessage('ИИ', reply);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+      }, 700);
     }
 
-    function generateAIReply(msg) {
-      const lower = msg.toLowerCase();
-      if (lower.includes('привет')) return 'Здравствуйте! Чем могу помочь?';
-      if (lower.includes('скидка')) return 'Скидка 5% доступна при участии в мини-игре!';
-      if (lower.includes('доставка')) return 'Мы доставляем в течение 45 минут в пределах города.';
+    function addChatMessage(sender, text) {
+      const p = document.createElement('p');
+      p.innerHTML = `<strong>${sender}:</strong> ${text}`;
+      chatMessages.appendChild(p);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    function generateAIReply(text) {
+      const msg = text.toLowerCase();
+      if (msg.includes('привет')) return 'Здравствуйте! Чем могу помочь?';
+      if (msg.includes('скидка')) return 'Скидка 5% доступна при участии в мини-игре!';
+      if (msg.includes('доставка')) return 'Мы доставляем за 30-45 минут в пределах города.';
       return 'Извините, я пока не понимаю этот запрос. Попробуйте другой вопрос.';
     }
-  </script></body>
+  </script>
+</body>
 </html>
