@@ -7,217 +7,45 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700&family=Teko:wght@400;600&family=Orbitron:wght@700&display=swap" rel="stylesheet">
     <style>
-        /* Общие стили */
         :root {
-            --neon-blue: #00f3ff;
-            --neon-pink: #ff00ff;
-            --neon-purple: #9d00ff;
+            --neon-blue: #0066ff;
+            --neon-pink: #9900ff;
+            --neon-purple: #5500ff;
             --dark-bg: #0a0a1a;
-            --card-bg: rgba(20, 10, 40, 0.8);
+            --card-bg: rgba(15, 5, 30, 0.9);
+            --text-dark: #e0e0ff;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        /* [Остальные CSS-стили из предыдущего примера] */
 
-        body {
-            font-family: 'Rajdhani', sans-serif;
-            background: var(--dark-bg);
-            color: white;
-            overflow-x: hidden;
-            min-height: 100vh;
-        }
-
-        /* Адаптивный контейнер */
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-            position: relative;
-        }
-
-        /* Медиа-запросы */
-        @media (max-width: 768px) {
-            .menu-grid {
-                grid-template-columns: 1fr !important;
-            }
-            
-            .floating-cart {
-                width: 100% !important;
-                right: -100% !important;
-            }
-            
-            .main-title {
-                font-size: 2.5rem !important;
-            }
-        }
-
-        /* --- ВСТАВЬТЕ СЮДА ВСЕ ПРЕДЫДУЩИЕ CSS-СТИЛИ ДЛЯ МЕНЮ, НАВИГАЦИИ И Т.Д. --- */
-        /* Пример: */
-        /*
-        .header { ... }
-        .nav { ... }
-        .menu-item { ... }
-        */
-        /* ------------------------------------------------------------------ */
-
-        /* Форма заказа */
-        .order-form {
-            background: rgba(10, 5, 20, 0.9);
-            border: 1px solid var(--neon-purple);
-            padding: 20px;
-            border-radius: 8px;
-            margin-top: 30px;
-            backdrop-filter: blur(5px);
-        }
-
-        .order-form h3 {
-            color: var(--neon-blue);
-            margin-bottom: 15px;
-            font-family: 'Teko', sans-serif;
-            font-size: 1.8rem;
-        }
-
-        .order-form input {
-            width: 100%;
-            padding: 12px;
-            margin-bottom: 15px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid var(--neon-blue);
-            color: white;
-            font-family: 'Rajdhani', sans-serif;
-        }
-
-        .order-form button {
-            background: linear-gradient(45deg, var(--neon-pink), var(--neon-purple));
-            color: white;
-            border: none;
-            padding: 12px 25px;
-            font-family: 'Rajdhani', sans-serif;
-            font-weight: 700;
-            cursor: pointer;
-            width: 100%;
-            transition: all 0.3s;
-        }
-
-        .order-form button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(255, 0, 255, 0.4);
-        }
-
-        /* Чат-бот */
+        /* Чат-бот (тёмная версия) */
         .chatbot {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            width: 60px;
-            height: 60px;
-            background: var(--neon-blue);
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            z-index: 999;
-            box-shadow: 0 0 20px rgba(0, 243, 255, 0.7);
-            transition: all 0.3s;
-        }
-
-        .chatbot:hover {
-            transform: scale(1.1);
-        }
-
-        .chatbot i {
-            font-size: 1.5rem;
-            color: black;
+            background: var(--neon-purple);
+            box-shadow: 0 0 20px rgba(85, 0, 255, 0.7);
         }
 
         .chat-window {
-            position: fixed;
-            bottom: 90px;
-            right: 20px;
-            width: 300px;
-            height: 400px;
             background: var(--card-bg);
             border: 1px solid var(--neon-purple);
-            border-radius: 10px;
-            overflow: hidden;
-            display: none; /* Hidden by default */
-            flex-direction: column;
-            z-index: 1000;
-            backdrop-filter: blur(10px);
         }
 
         .chat-header {
-            padding: 15px;
-            background: rgba(157, 0, 255, 0.3);
+            background: rgba(85, 0, 255, 0.4);
             color: var(--neon-blue);
-            font-family: 'Teko', sans-serif;
-            font-size: 1.3rem;
-        }
-
-        .chat-messages {
-            flex: 1;
-            padding: 15px;
-            overflow-y: auto;
-            color: white; /* Ensure text is visible */
-        }
-
-        .chat-messages p {
-            margin-bottom: 8px; /* Spacing for chat messages */
-        }
-
-        .chat-input {
-            padding: 10px;
-            display: flex;
-        }
-
-        .chat-input input {
-            flex: 1;
-            padding: 10px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid var(--neon-blue);
-            color: white;
-            font-family: 'Rajdhani', sans-serif; /* Consistent font */
-        }
-
-        .chat-input button {
-            background: var(--neon-blue);
-            color: black;
-            border: none;
-            padding: 0 15px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        .chat-input button:hover {
-            background: var(--neon-pink); /* Hover effect for chat button */
         }
 
         /* AI-рекомендации */
         .ai-recommendation {
-            background: rgba(0, 243, 255, 0.1);
+            background: rgba(0, 102, 255, 0.15);
             border-left: 3px solid var(--neon-blue);
-            padding: 15px;
-            margin: 20px 0;
-            font-style: italic;
-            color: lightcyan; /* Ensure visibility */
+            color: var(--text-dark);
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="order-form">
-            <h3><i class="fas fa-credit-card"></i> BESTILLING</h3>
-            <input type="text" id="name" placeholder="Ditt navn">
-            <input type="text" id="address" placeholder="Leveringsadresse">
-            <button onclick="submitOrder()"><i class="fas fa-paper-plane"></i> BEKREFT BESTILLING</button>
-            <p id="order-status" style="margin-top: 15px;"></p>
-        </div>
-    </div>
+    <!-- [Весь HTML из предыдущего примера] -->
 
+    <!-- Чат-бот -->
     <div class="chatbot" id="chatbot-trigger">
         <i class="fas fa-robot"></i>
     </div>
@@ -228,9 +56,9 @@
         </div>
         <div class="chat-messages" id="chat-messages">
             <div class="ai-recommendation">
-                <strong>AI anbefaler:</strong> Prøv vår signaturrett QUANTUM MARGHERITA med ekstra neon-saus!
+                <strong><i class="fas fa-star"></i> AI ANBEFALER:</strong> Prøv vår signaturrett QUANTUM MARGHERITA med ekstra neon-saus!
             </div>
-            <p>Hei! Jeg er din digitale assistent. Hva kan jeg hjelpe deg med?</p>
+            <p>Hei! Jeg er din digitale assistent. Spør om anbefalinger eller leveringstider.</p>
         </div>
         <div class="chat-input">
             <input type="text" id="user-input" placeholder="Skriv melding...">
@@ -239,114 +67,102 @@
     </div>
 
     <script>
-        // --- ВСТАВЬТЕ СЮДА ВЕСЬ ПРЕДЫДУЩИЙ JAVASCRIPT КОД ДЛЯ КОРЗИНЫ, МЕНЮ И Т.Д. ---
-        // Пример:
-        // let cart = [];
-        // function addToCart(item) { ... }
-        // function updateCart() { ... }
-        // ------------------------------------------------------------------
-
-        // --- IMPORTANT: Placeholder for your 'cart' array and 'updateCart' function ---
-        // You MUST define these based on your existing shopping cart logic.
-        // If they are not defined, the `submitOrder` function will not work correctly.
-        let cart = []; // Example: initialize an empty cart array
+        // Корзина (исправленная версия)
+        let cart = [];
         
-        // Example: A basic updateCart function (you'll need to expand this based on your actual cart display)
         function updateCart() {
-            // This function should update the display of your shopping cart.
-            // For example, update item counts, total price, etc.
-            console.log("Cart updated:", cart);
-            // You might have elements like:
-            // document.getElementById('cart-items-count').textContent = cart.length;
-            // document.getElementById('cart-total-price').textContent = cart.reduce((sum, item) => sum + item.price, 0);
-        }
-        // --- End of placeholder ---
-
-
-        // Форма заказа
-        function submitOrder() {
-            const nameInput = document.getElementById("name");
-            const addressInput = document.getElementById("address");
-            const name = nameInput.value;
-            const address = addressInput.value;
+            const cartItems = document.getElementById('cart-items');
+            const cartTotal = document.getElementById('cart-total');
+            const cartCount = document.querySelector('.cart-count');
             
-            if (!name || !address) {
-                document.getElementById("order-status").innerHTML = `<p style="color: red;">Vennligst fyll ut navn og adresse!</p>`;
-                return;
-            }
+            cartItems.innerHTML = '';
+            let total = 0;
             
-            if (cart.length === 0) {
-                document.getElementById("order-status").innerHTML = `<p style="color: orange;">Handlekurven er tom!</p>`;
-                return;
-            }
-
-            const total = cart.reduce((sum, item) => sum + item.price, 0);
-            document.getElementById("order-status").innerHTML = `
-                <p style="color: var(--neon-blue)">Takk, ${name}!</p>
-                <p>Din bestilling til <strong>${address}</strong> er bekreftet.</p>
-                <p>Antall varer: <strong>${cart.length}</strong> for <strong>${total} NOK</strong></p>
-                <p><i class="fas fa-motorcycle"></i> Estimert levering: 30 min</p>
-            `;
-
-            // Очистка корзины и полей формы
-            cart = []; // Reset the cart
-            updateCart(); // Update the cart display to show it's empty
-            nameInput.value = ''; // Clear name input
-            addressInput.value = ''; // Clear address input
+            cart.forEach(item => {
+                const li = document.createElement('li');
+                li.textContent = `${item.name} - ${item.price} NOK`;
+                cartItems.appendChild(li);
+                total += item.price;
+            });
+            
+            cartTotal.textContent = total;
+            cartCount.textContent = cart.length;
         }
 
         // Чат-бот
         const chatbotTrigger = document.getElementById('chatbot-trigger');
         const chatWindow = document.getElementById('chat-window');
-        const chatMessages = document.getElementById('chat-messages'); // Get chat messages div
-
+        
         chatbotTrigger.addEventListener('click', () => {
             chatWindow.style.display = chatWindow.style.display === 'flex' ? 'none' : 'flex';
         });
 
         function sendMessage() {
-            const userInput = document.getElementById('user-input');
-            const userMessage = userInput.value.trim();
+            const input = document.getElementById('user-input');
+            const messages = document.getElementById('chat-messages');
             
-            if (userMessage === '') return;
+            if (input.value.trim() === '') return;
             
             // Пользовательское сообщение
-            chatMessages.innerHTML += `<p><strong>Du:</strong> ${userMessage}</p>`;
+            messages.innerHTML += `<p><strong>Du:</strong> ${input.value}</p>`;
             
-            // Ответ бота
+            // Ответ AI
             setTimeout(() => {
                 const responses = [
-                    "Jeg anbefaler NEON PEPPERONI XTREME med ekstra jalapeños!",
-                    "Har du prøvd vår nye CYBER MOONRISE-drink?",
-                    "Leveringstid er vanligvis 30-45 minutter.",
-                    "Vi har spesialtilbud på GOLDEN TRUFFLE BURGER i dag!",
-                    "Vi aksepterer alle standard kredittkort og kryptovalutaer."
+                    "Anbefaler NEON PEPPERONI XTREME med ekstra jalapeños!",
+                    "Leveringstid: 30-45 minutter til din lokasjon.",
+                    "Spesialtilbud i dag: 20% rabatt på burgere!",
+                    "Vår CYBER MOONRISE-drink er perfekt til din pizza."
                 ];
                 const randomResponse = responses[Math.floor(Math.random() * responses.length)];
-                chatMessages.innerHTML += `<p><strong>AI:</strong> ${randomResponse}</p>`;
-                // Scroll to the bottom of the chat messages
-                chatMessages.scrollTop = chatMessages.scrollHeight;
-            }, 1000); // 1 second delay for bot response
+                messages.innerHTML += `<p><strong>AI:</strong> ${randomResponse}</p>`;
+                messages.scrollTop = messages.scrollHeight;
+            }, 800);
             
-            userInput.value = ''; // Clear input field
-            chatMessages.scrollTop = chatMessages.scrollHeight; // Scroll to bottom immediately after user message
+            input.value = '';
+            messages.scrollTop = messages.scrollHeight;
         }
 
-        // AI-рекомендации при загрузке
-        window.addEventListener('load', () => {
-            const recommendations = [
-                "I dag anbefaler vi: QUANTUM MARGHERITA med ekstra mozzarella!",
-                "Spesialtilbud: 20% rabatt på alle burgere i dag!",
-                "Prøv vår nye SYNTH-WATER med elektrolytter for ekstra energi!",
-                "Ikke glem å sjekke våre daglige tilbud under 'DAGENS DEAL'!"
-            ];
-            const randomRec = recommendations[Math.floor(Math.random() * recommendations.length)];
-            const aiRecommendationElement = document.querySelector('.ai-recommendation');
-            if (aiRecommendationElement) { // Check if the element exists
-                aiRecommendationElement.innerHTML = 
-                    `<strong><i class="fas fa-star"></i> AI ANBEFALER:</strong> ${randomRec}`;
-            }
+        // Инициализация
+        document.querySelectorAll('.add-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const item = {
+                    name: this.dataset.name,
+                    price: parseInt(this.dataset.price)
+                };
+                cart.push(item);
+                updateCart();
+                
+                // Анимация
+                this.classList.add('pulse');
+                setTimeout(() => this.classList.remove('pulse'), 500);
+            });
         });
+
+        // Форма заказа
+        function submitOrder() {
+            const name = document.getElementById('name').value;
+            const address = document.getElementById('address').value;
+            
+            if (!name || !address) {
+                alert('Vennligst fyll ut alle felter');
+                return;
+            }
+            
+            if (cart.length === 0) {
+                alert('Handlekurven er tom');
+                return;
+            }
+            
+            document.getElementById('order-status').innerHTML = `
+                <p style="color: var(--neon-blue)">Takk, ${name}!</p>
+                <p>Din bestilling på ${cart.reduce((sum, item) => sum + item.price, 0)} NOK er registrert.</p>
+                <p>Levering til: ${address}</p>
+            `;
+            
+            cart = [];
+            updateCart();
+        }
     </script>
 </body>
 </html>
