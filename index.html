@@ -1,515 +1,83 @@
 <!DOCTYPE html>
-<html lang="no">
+<html>
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>CYBERDELUXE OSLO | 2077</title>
-<style>
-  @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700&family=Teko:wght@400;600&display=swap');
-
-  :root {
-    --neon-blue: #00f3ff;
-    --neon-pink: #ff00ff;
-    --neon-purple: #9d00ff;
-    --dark-bg: #0a0a1a;
-    --card-bg: rgba(20,10,40,0.85);
-  }
-
-  * {
-    margin:0; padding:0; box-sizing: border-box;
-  }
-
-  body, html {
-    height: 100%;
-    background: #0a0a1a;
-    overflow-x: hidden;
-    font-family: 'Rajdhani', sans-serif;
-    color: white;
-  }
-
-  /* Кибер-дождь фон */
-  #cyber-rain {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    pointer-events: none;
-    z-index: 0;
-    background: #0a0a1a;
-  }
-
-  /* Анимация дождя */
-  .drop {
-    position: absolute;
-    bottom: 100%;
-    width: 2px;
-    height: 20px;
-    background: linear-gradient(180deg, var(--neon-blue), transparent);
-    animation-name: fall;
-    animation-timing-function: linear;
-    animation-iteration-count: infinite;
-  }
-
-  @keyframes fall {
-    to {
-      transform: translateY(110vh);
-      opacity: 0;
-    }
-  }
-
-  /* Контент сайта */
-  .container {
-    max-width: 1100px;
-    margin: 60px auto 120px auto;
-    padding: 0 20px;
-    position: relative;
-    z-index: 10;
-  }
-
-  h1 {
-    font-family: 'Teko', sans-serif;
-    font-size: 3.2rem;
-    color: var(--neon-pink);
-    text-align: center;
-    margin-bottom: 40px;
-    text-shadow: 0 0 10px var(--neon-pink);
-  }
-
-  .menu-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
-    gap: 20px;
-  }
-
-  .menu-card {
-    background: var(--card-bg);
-    border: 1px solid var(--neon-purple);
-    border-radius: 8px;
-    padding: 20px;
-    box-shadow: 0 0 15px var(--neon-purple);
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-  }
-
-  .menu-card h3 {
-    margin-bottom: 10px;
-    font-size: 1.5rem;
-    color: var(--neon-blue);
-  }
-
-  .menu-card p {
-    flex-grow: 1;
-    margin-bottom: 15px;
-    font-size: 0.95rem;
-    color: #a0a0ff;
-  }
-
-  .menu-card button {
-    background: linear-gradient(45deg, var(--neon-pink), var(--neon-purple));
-    border: none;
-    color: white;
-    font-weight: 700;
-    padding: 10px 0;
-    cursor: pointer;
-    border-radius: 6px;
-    font-family: 'Rajdhani', sans-serif;
-    transition: box-shadow 0.3s ease;
-  }
-
-  .menu-card button:hover {
-    box-shadow: 0 0 20px var(--neon-pink);
-  }
-
-  /* Плавающая корзина */
-  #floating-cart {
-    position: fixed;
-    top: 100px;
-    right: 20px;
-    width: 320px;
-    max-height: 400px;
-    background: var(--card-bg);
-    border: 2px solid var(--neon-purple);
-    border-radius: 12px;
-    box-shadow: 0 0 30px var(--neon-purple);
-    backdrop-filter: blur(10px);
-    z-index: 9999;
-    display: flex;
-    flex-direction: column;
-    user-select: none;
-    cursor: grab;
-  }
-
-  #floating-cart.dragging {
-    cursor: grabbing;
-  }
-
-  #cart-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 15px;
-    border-bottom: 1px solid var(--neon-purple);
-    font-family: 'Teko', sans-serif;
-    font-weight: 600;
-    font-size: 1.3rem;
-    color: var(--neon-pink);
-  }
-
-  #cart-close {
-    cursor: pointer;
-    font-size: 1.5rem;
-    color: var(--neon-pink);
-    user-select: none;
-  }
-
-  #cart-items {
-    flex-grow: 1;
-    overflow-y: auto;
-    padding: 10px 15px;
-    font-size: 0.95rem;
-    color: #c0c0ff;
-  }
-
-  #cart-items li {
-    margin-bottom: 10px;
-    display: flex;
-    justify-content: space-between;
-  }
-
-  #cart-total {
-    padding: 10px 15px;
-    font-weight: 700;
-    font-size: 1.1rem;
-    color: var(--neon-blue);
-    border-top: 1px solid var(--neon-purple);
-  }
-
-  #order-section {
-    padding: 10px 15px;
-    border-top: 1px solid var(--neon-purple);
-  }
-
-  #order-section input {
-    width: 100%;
-    margin-bottom: 10px;
-    padding: 8px 10px;
-    background: rgba(255 255 255 / 0.1);
-    border: 1px solid var(--neon-blue);
-    border-radius: 6px;
-    color: white;
-    font-family: 'Rajdhani', sans-serif;
-    font-size: 1rem;
-  }
-
-  #order-section button {
-    width: 100%;
-    padding: 10px 0;
-    font-weight: 700;
-    font-family: 'Rajdhani', sans-serif;
-    background: linear-gradient(45deg, var(--neon-pink), var(--neon-purple));
-    border: none;
-    color: white;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: box-shadow 0.3s ease;
-  }
-
-  #order-section button:hover {
-    box-shadow: 0 0 25px var(--neon-pink);
-  }
-
-  /* Кнопка иконка корзины */
-  #cart-toggle-btn {
-    position: fixed;
-    top: 40px;
-    right: 20px;
-    width: 56px;
-    height: 56px;
-    background: var(--neon-blue);
-    border-radius: 50%;
-    box-shadow: 0 0 20px var(--neon-blue);
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 10000;
-    user-select: none;
-  }
-
-  #cart-toggle-btn i {
-    color: black;
-    font-size: 1.7rem;
-  }
-
-  /* Плавающий чат-бот */
-  #floating-chatbot {
-    position: fixed;
-    bottom: 40px;
-    right: 20px;
-    width: 320px;
-    max-height: 400px;
-    background: var(--card-bg);
-    border: 2px solid var(--neon-purple);
-    border-radius: 12px;
-    box-shadow: 0 0 30px var(--neon-purple);
-    backdrop-filter: blur(10px);
-    z-index: 9999;
-    display: flex;
-    flex-direction: column;
-    user-select: none;
-    cursor: grab;
-  }
-
-  #floating-chatbot.dragging {
-    cursor: grabbing;
-  }
-
-  #chat-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 15px;
-    border-bottom: 1px solid var(--neon-purple);
-    font-family: 'Teko', sans-serif;
-    font-weight: 600;
-    font-size: 1.3rem;
-    color: var(--neon-pink);
-  }
-
-  #chat-close {
-    cursor: pointer;
-    font-size: 1.5rem;
-    color: var(--neon-pink);
-    user-select: none;
-  }
-
-  #chat-messages {
-    flex-grow: 1;
-    padding: 10px 15px;
-    overflow-y: auto;
-    font-size: 0.95rem;
-    color: #c0c0ff;
-  }
-
-  #chat-input {
-    display: flex;
-    border-top: 1px solid var(--neon-purple);
-    padding: 10px 15px;
-  }
-
-  #chat-input input {
-    flex-grow: 1;
-    padding: 8px 10px;
-    border-radius: 6px;
-    border: 1px solid var(--neon-blue);
-    background: rgba(255 255 255 / 0.1);
-    color: white;
-    font-family: 'Rajdhani', sans-serif;
-    font-size: 1rem;
-  }
-
-  #chat-input button {
-    margin-left: 10px;
-    background: var(--neon-blue);
-    border: none;
-    border-radius: 6px;
-    color: black;
-    font-weight: 700;
-    cursor: pointer;
-    padding: 8px 15px;
-    font-family: 'Rajdhani', sans-serif;
-    transition: box-shadow 0.3s ease;
-  }
-
-  #chat-input button:hover {
-    box-shadow: 0 0 20px var(--neon-blue);
-  }
-
-  /* Иконка чат-бота */
-  #chat-toggle-btn {
-    position: fixed;
-    bottom: 110px;
-    right: 20px;
-    width: 56px;
-    height: 56px;
-    background: var(--neon-pink);
-    border-radius: 50%;
-    box-shadow: 0 0 20px var(--neon-pink);
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 10000;
-    user-select: none;
-  }
-
-  #chat-toggle-btn i {
-    color: black;
-    font-size: 1.7rem;
-  }
-
-  /* Scrollbar styles */
-  #cart-items::-webkit-scrollbar,
-  #chat-messages::-webkit-scrollbar {
-    width: 6px;
-  }
-
-  #cart-items::-webkit-scrollbar-thumb,
-  #chat-messages::-webkit-scrollbar-thumb {
-    background: var(--neon-purple);
-    border-radius: 3px;
-  }
-
-</style>
-<!-- FontAwesome CDN for icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <title>Мой плеер</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial;
+            color: white;
+            background: black;
+        }
+        
+        #video-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+            opacity: 0.7;
+        }
+        
+        .player {
+            background: rgba(0,0,0,0.5);
+            width: 90%;
+            max-width: 500px;
+            margin: 20px auto;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        
+        .song {
+            padding: 10px;
+            margin: 5px 0;
+            background: rgba(255,255,255,0.1);
+            cursor: pointer;
+        }
+        
+        .song:hover {
+            background: rgba(255,255,255,0.2);
+        }
+        
+        audio {
+            width: 100%;
+            margin-top: 15px;
+        }
+    </style>
 </head>
 <body>
-
-<!-- Кибер-дождь -->
-<div id="cyber-rain"></div>
-
-<!-- Контент -->
-<div class="container">
-  <h1>CYBERDELUXE OSLO | 2077</h1>
-
-  <div class="menu-grid" id="menu-grid">
-    <!-- Пример товара -->
-    <div class="menu-card">
-      <h3>Quantum Margherita</h3>
-      <p>Signaturrett med neon-saus og ekstra mozzarella.</p>
-      <button class="add-btn" data-name="Quantum Margherita" data-price="129">Legg til i kurv</button>
+    <!-- Видеофон (замените video_1.mp4 на свой файл) -->
+    <video autoplay muted loop id="video-bg">
+        <source src="video_1.mp4" type="video/mp4">
+    </video>
+    
+    <div class="player">
+        <h2>Мой плейлист</h2>
+        
+        <!-- Список песен -->
+        <div class="song" onclick="play(1)">Песня 1</div>
+        <div class="song" onclick="play(2)">Песня 2</div>
+        <div class="song" onclick="play(3)">Песня 3</div>
+        <div class="song" onclick="play(4)">Песня 4</div>
+        <div class="song" onclick="play(5)">Песня 5</div>
+        <div class="song" onclick="play(6)">Песня 6</div>
+        <div class="song" onclick="play(7)">Песня 7</div>
+        <div class="song" onclick="play(8)">Песня 8</div>
+        <div class="song" onclick="play(9)">Песня 9</div>
+        <div class="song" onclick="play(10)">Песня 10</div>
+        
+        <!-- Аудиоплеер -->
+        <audio id="audio" controls></audio>
     </div>
-    <div class="menu-card">
-      <h3>Neon Pepperoni Xtreme</h3>
-      <p>Skarp pepperoni med jalapeños og krysser.</p>
-      <button class="add-btn" data-name="Neon Pepperoni Xtreme" data-price="149">Legg til i kurv</button>
-    </div>
-    <div class="menu-card">
-      <h3>Cyber Moonrise Drink</h3>
-      <p>Frisk drikk med elektrolytter og neon-smak.</p>
-      <button class="add-btn" data-name="Cyber Moonrise Drink" data-price="69">Legg til i kurv</button>
-    </div>
-    <div class="menu-card">
-      <h3>Golden Truffle Burger</h3>
-      <p>Luksusburger med trøffel og neon-saus.</p>
-      <button class="add-btn" data-name="Golden Truffle Burger" data-price="199">Legg til i kurv</button>
-    </div>
-  </div>
-</div>
 
-<!-- Кнопки для открытия плавающих окон -->
-<div id="cart-toggle-btn" title="Handlekurv"><i class="fas fa-shopping-cart"></i></div>
-<div id="chat-toggle-btn" title="Chatbot"><i class="fas fa-robot"></i></div>
-
-<!-- Плавающая корзина -->
-<div id="floating-cart" style="display:none;">
-  <div id="cart-header">
-    Handlekurv <span id="cart-close" title="Lukk">&times;</span>
-  </div>
-  <ul id="cart-items"></ul>
-  <div id="cart-total">Total: 0 NOK</div>
-  <div id="order-section">
-    <input type="text" id="name" placeholder="Ditt navn" />
-    <input type="text" id="address" placeholder="Leveringsadresse" />
-    <button id="order-btn">Bekreft bestilling</button>
-    <p id="order-status" style="margin-top:8px; font-style: italic;"></p>
-  </div>
-</div>
-
-<!-- Плавающий чат-бот -->
-<div id="floating-chatbot" style="display:none;">
-  <div id="chat-header">
-    CYBER-ASSISTENT <span id="chat-close" title="Lukk">&times;</span>
-  </div>
-  <div id="chat-messages">
-    <div style="border-left: 3px solid var(--neon-blue); padding-left:10px; font-style: italic; margin-bottom:10px;">
-      <strong>AI anbefaler:</strong> Prøv vår signaturrett QUANTUM MARGHERITA med ekstra neon-saus!
-    </div>
-    <p>Hei! Jeg er din digitale assistent. Hva kan jeg hjelpe deg med?</p>
-  </div>
-  <div id="chat-input">
-    <input type="text" id="user-input" placeholder="Skriv melding..." />
-    <button id="send-btn"><i class="fas fa-paper-plane"></i></button>
-  </div>
-</div>
-
-<!-- Звуки -->
-<audio id="click-sound" src="https://actions.google.com/sounds/v1/ui/click.ogg"></audio>
-<audio id="add-item-sound" src="https://actions.google.com/sounds/v1/cart/add_to_cart.ogg"></audio>
-
-<script>
-  // Кибер-дождь генератор
-  const rainContainer = document.getElementById('cyber-rain');
-  const dropsCount = 150;
-  const drops = [];
-
-  function randomBetween(min, max) {
-    return Math.random() * (max - min) + min;
-  }
-
-  for(let i = 0; i < dropsCount; i++){
-    const drop = document.createElement('div');
-    drop.classList.add('drop');
-    drop.style.left = `${Math.random() * 100}vw`;
-    drop.style.animationDuration = `${randomBetween(0.5, 1.5)}s`;
-    drop.style.animationDelay = `${Math.random() * 5}s`;
-    drop.style.height = `${randomBetween(15, 25)}px`;
-    rainContainer.appendChild(drop);
-    drops.push(drop);
-  }
-
-  // Корзина
-  let cart = [];
-
-  const cartToggleBtn = document.getElementById('cart-toggle-btn');
-  const floatingCart = document.getElementById('floating-cart');
-  const cartClose = document.getElementById('cart-close');
-  const cartItemsList = document.getElementById('cart-items');
-  const cartTotalDisplay = document.getElementById('cart-total');
-  const orderBtn = document.getElementById('order-btn');
-  const orderStatus = document.getElementById('order-status');
-  const inputName = document.getElementById('name');
-  const inputAddress = document.getElementById('address');
-
-  function updateCart() {
-    cartItemsList.innerHTML = '';
-    let total = 0;
-    cart.forEach((item, idx) => {
-      total += item.price;
-      const li = document.createElement('li');
-      li.textContent = `${item.name} - ${item.price} NOK`;
-      // Кнопка удалить
-      const delBtn = document.createElement('button');
-      delBtn.textContent = '×';
-      delBtn.style.marginLeft = '8px';
-      delBtn.style.background = 'transparent';
-      delBtn.style.border = 'none';
-      delBtn.style.color = 'var(--neon-pink)';
-      delBtn.style.fontWeight = '700';
-      delBtn.style.cursor = 'pointer';
-      delBtn.title = 'Fjern';
-      delBtn.onclick = () => {
-        cart.splice(idx,1);
-        updateCart();
-      };
-      li.appendChild(delBtn);
-      cartItemsList.appendChild(li);
-    });
-    cartTotalDisplay.textContent = `Total: ${total} NOK`;
-  }
-
-  cartToggleBtn.onclick = () => {
-    playSound('click-sound');
-    if(floatingCart.style.display === 'flex'){
-      floatingCart.style.display = 'none';
-    } else {
-      floatingCart.style.display = 'flex';
-      // Скрыть чат, если открыт
-      floatingChatbot.style.display = 'none';
-    }
-  };
-
-  cartClose.onclick = () => {
-    floatingCart.style.display = 'none';
-  };
+    <script>
+        function play(num) {
+            document.getElementById("audio").src = "music_" + num + ".mp3";
+            document.getElementById("audio").play();
+        }
+    </script>
+</body>
+</html>
