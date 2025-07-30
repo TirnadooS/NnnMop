@@ -7,7 +7,8 @@
   <style>
     body {
       font-family: 'Orbitron', sans-serif;
-      background: #0f0f0f;
+      background: url('https://i.ibb.co/g39FvsB/cyber-rain.gif') no-repeat center center fixed;
+      background-size: cover;
       color: #00fff7;
       margin: 0;
       padding: 1em;
@@ -33,7 +34,7 @@
       margin-bottom: 2em;
     }
     .item {
-      background: linear-gradient(145deg, #1c1c1c, #101010);
+      background: rgba(15, 15, 15, 0.8);
       padding: 1em;
       border-radius: 12px;
       border: 1px solid #00fff7;
@@ -50,16 +51,16 @@
       border-radius: 6px;
       font-weight: bold;
     }
-    #cart, #order {
+    #cart, #order, #chat {
       max-width: 500px;
       margin: 0 auto 2em;
-      background: #181818;
+      background: rgba(24, 24, 24, 0.9);
       padding: 1em;
       border-radius: 12px;
       border: 1px solid #00fff7;
       box-shadow: 0 0 8px rgba(0, 255, 255, 0.2);
     }
-    #order input, #order button {
+    #order input, #order button, #chat input, #chat button {
       width: 100%;
       margin: 0.5em 0;
       padding: 0.7em;
@@ -68,7 +69,7 @@
       color: #fff;
       border-radius: 6px;
     }
-    #order button {
+    #order button, #chat button {
       background: #00fff7;
       color: #000;
       font-weight: bold;
@@ -76,13 +77,20 @@
   </style>
 </head>
 <body>
-  <h1>NnnMop</h1>
+  <audio autoplay loop>
+    <source src="https://files.catbox.moe/m2ub4y.mp3" type="audio/mpeg">
+  </audio>  <h1>NnnMop</h1>
   <h3>Cyberpunk Food Terminal</h3>  <div class="menu" id="menu"></div>  <div id="cart"></div>  <form id="order">
     <input type="text" placeholder="Ваше имя" required />
     <input type="text" placeholder="Адрес доставки" required />
     <input type="tel" placeholder="Телефон" required />
     <button type="submit">Отправить заказ</button>
-  </form>  <script>
+  </form>  <div id="chat">
+    <h3>🤖 AI Ассистент</h3>
+    <div id="chat-log" style="max-height: 200px; overflow-y: auto; font-size: 0.9em;"></div>
+    <input type="text" id="user-input" placeholder="Спросите что-нибудь..." />
+    <button onclick="sendMessage()">Отправить</button>
+  </div>  <script>
     const menu = [
       { name: 'Суши-сет', price: 300 },
       { name: 'Пицца Маргарита', price: 200 },
@@ -121,5 +129,27 @@
       updateCart();
       orderForm.reset();
     });
+
+    function sendMessage() {
+      const input = document.getElementById('user-input');
+      const log = document.getElementById('chat-log');
+      const userMessage = input.value.trim();
+      if (!userMessage) return;
+      log.innerHTML += `<p><strong>Вы:</strong> ${userMessage}</p>`;
+      const reply = generateAIReply(userMessage);
+      setTimeout(() => {
+        log.innerHTML += `<p><strong>ИИ:</strong> ${reply}</p>`;
+        log.scrollTop = log.scrollHeight;
+      }, 600);
+      input.value = '';
+    }
+
+    function generateAIReply(msg) {
+      const lower = msg.toLowerCase();
+      if (lower.includes('привет')) return 'Здравствуйте! Чем могу помочь?';
+      if (lower.includes('скидка')) return 'Скидка 5% доступна при участии в мини-игре!';
+      if (lower.includes('доставка')) return 'Мы доставляем в течение 45 минут в пределах города.';
+      return 'Извините, я пока не понимаю этот запрос. Попробуйте другой вопрос.';
+    }
   </script></body>
 </html>
