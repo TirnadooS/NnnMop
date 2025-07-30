@@ -1,348 +1,514 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>NnnMop - Cyberpunk Food Terminal</title>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet" />
-  <style>
-    /* Базовые стили */
-    body {
-      margin: 0;
-      font-family: 'Orbitron', sans-serif;
-      color: #00fff7;
-      background: #0f0f0f;
-      overflow-x: hidden;
-    }
-    /* Киберпанк дождь — фон */
-    body::before {
-      content: "";
-      position: fixed;
-      top: 0; left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: url('https://i.ibb.co/g39FvsB/cyber-rain.gif') center center / cover no-repeat;
-      opacity: 0.25;
-      pointer-events: none;
-      z-index: -1;
-    }
-    h1 {
-      text-align: center;
-      font-size: 2.5em;
-      color: #00fff7;
-      text-shadow: 0 0 8px #00fff7;
-      margin-top: 1rem;
-    }
-    h3 {
-      text-align: center;
-      color: #ff00ff;
-      font-weight: 400;
-      margin: 0.2em 0 1.5em;
-      text-shadow: 0 0 6px #ff00ff;
-    }
-    .menu {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-      gap: 1em;
-      max-width: 900px;
-      margin: 0 auto 2em;
-      padding: 0 1em;
-    }
-    .item {
-      background: rgba(15, 15, 15, 0.8);
-      padding: 1em;
-      border-radius: 12px;
-      border: 1px solid #00fff7;
-      box-shadow: 0 0 12px rgba(0, 255, 255, 0.1);
-      text-align: center;
-    }
-    .item button {
-      margin-top: 0.5em;
-      background: #ff00ff;
-      color: #fff;
-      border: none;
-      padding: 0.5em 1em;
-      cursor: pointer;
-      border-radius: 6px;
-      font-weight: bold;
-      transition: background 0.3s ease;
-    }
-    .item button:hover {
-      background: #cc00cc;
-    }
-    #cart {
-      max-width: 400px;
-      margin: 0 auto 2em;
-      background: rgba(24, 24, 24, 0.9);
-      padding: 1em;
-      border-radius: 12px;
-      border: 1px solid #00fff7;
-      box-shadow: 0 0 8px rgba(0, 255, 255, 0.2);
-      font-size: 1rem;
-    }
-    #order {
-      max-width: 400px;
-      margin: 0 auto 4em;
-      background: rgba(24, 24, 24, 0.9);
-      padding: 1em;
-      border-radius: 12px;
-      border: 1px solid #00fff7;
-      box-shadow: 0 0 8px rgba(0, 255, 255, 0.2);
-    }
-    #order input, #order button {
-      width: 100%;
-      margin: 0.5em 0;
-      padding: 0.7em;
-      border: 1px solid #ff00ff;
-      background: #0f0f0f;
-      color: #fff;
-      border-radius: 6px;
-      font-size: 1rem;
-    }
-    #order button {
-      background: #00fff7;
-      color: #000;
-      font-weight: bold;
-      cursor: pointer;
-      transition: background 0.3s ease;
-    }
-    #order button:hover {
-      background: #00cccc;
-    }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>NnnMop — Cyberpunk Terminal</title>
 
-    /* Плавающий чат-бот и AI ассистент */
-    #chatbot-trigger {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background: #00fff7;
-      width: 60px;
-      height: 60px;
-      border-radius: 50%;
-      box-shadow: 0 0 20px #00fff7;
-      cursor: pointer;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 1001;
-      transition: transform 0.3s ease;
+<!-- Шрифты и иконки -->
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet" />
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+/>
+
+<style>
+  /* --- Базовые стили --- */
+  * {
+    box-sizing: border-box;
+  }
+  body, html {
+    margin: 0;
+    height: 100%;
+    font-family: 'Orbitron', monospace;
+    background: #080818;
+    color: #00fff7;
+    overflow-x: hidden;
+    user-select: none; /* чтоб не выделялось при перетаскивании */
+  }
+  h1, h2, h3 {
+    text-align: center;
+    text-shadow: 0 0 10px #00fff7;
+  }
+  h1 {
+    margin-top: 1rem;
+    font-size: 3rem;
+  }
+  h3 {
+    color: #ff00ff;
+    margin-bottom: 1rem;
+  }
+  main {
+    max-width: 960px;
+    margin: 1rem auto 4rem;
+    padding: 0 1rem;
+  }
+  /* --- Анимированный кибер-дождь на canvas --- */
+  canvas#cyberRain {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1;
+    pointer-events: none;
+    background: #080818;
+  }
+
+  /* --- Меню --- */
+  .menu {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1.2rem;
+  }
+  .menu-item {
+    background: rgba(30, 10, 60, 0.8);
+    border: 1px solid #ff00ff;
+    border-radius: 12px;
+    box-shadow: 0 0 12px #ff00ff;
+    padding: 1rem;
+    text-align: center;
+    transition: box-shadow 0.3s ease;
+  }
+  .menu-item:hover {
+    box-shadow: 0 0 20px #00fff7, 0 0 30px #ff00ff;
+  }
+  .menu-item h4 {
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+  }
+  .menu-item p {
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+  }
+  .menu-item button {
+    background: linear-gradient(45deg, #ff00ff, #9d00ff);
+    border: none;
+    padding: 0.6rem 1.2rem;
+    color: #00fff7;
+    font-weight: 700;
+    cursor: pointer;
+    border-radius: 8px;
+    text-shadow: 0 0 5px #00fff7;
+    transition: background 0.3s ease;
+  }
+  .menu-item button:hover {
+    background: linear-gradient(45deg, #00fff7, #5500ff);
+  }
+
+  /* --- Плавающие кнопки (фиксированы внизу справа) --- */
+  .floating-btn {
+    position: fixed;
+    bottom: 20px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 0 20px #00fff7;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.25s ease;
+    user-select: none;
+    background: linear-gradient(45deg, #00fff7, #5500ff);
+    z-index: 1100;
+  }
+  .floating-btn:hover {
+    transform: scale(1.1);
+  }
+  #chatbot-btn {
+    right: 20px;
+  }
+  #cart-btn {
+    right: 90px;
+  }
+  .floating-btn i {
+    color: #080818;
+    font-size: 1.8rem;
+  }
+
+  /* --- Плавающие окна (свободно перемещаемые) --- */
+  .floating-window {
+    position: fixed;
+    width: 320px;
+    max-height: 480px;
+    background: rgba(20, 10, 40, 0.95);
+    border-radius: 14px;
+    border: 1px solid #ff00ff;
+    box-shadow: 0 0 18px #ff00ff;
+    display: flex;
+    flex-direction: column;
+    z-index: 1099;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+    color: #00fff7;
+    cursor: default;
+    user-select: none;
+  }
+  /* Начальные позиции окон */
+  #chatbot-window {
+    right: 20px;
+    bottom: 90px;
+    display: none;
+  }
+  #cart-window {
+    right: 90px;
+    bottom: 90px;
+    display: none;
+  }
+
+  /* Заголовок окна (зона перетаскивания) */
+  .floating-window header {
+    background: linear-gradient(45deg, #ff00ff, #9d00ff);
+    padding: 12px;
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: #00fff7;
+    text-align: center;
+    user-select: none;
+    box-shadow: 0 0 8px #ff00ff inset;
+    cursor: move;
+    position: relative;
+  }
+  .floating-window header button.close-btn {
+    position: absolute;
+    right: 12px;
+    top: 12px;
+    background: none;
+    border: none;
+    font-size: 1.4rem;
+    color: #00fff7;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  /* Содержимое окна */
+  .floating-window .content {
+    padding: 12px 15px;
+    overflow-y: auto;
+    flex-grow: 1;
+    font-size: 0.95rem;
+  }
+  /* Скролл */
+  .floating-window .content::-webkit-scrollbar {
+    width: 6px;
+  }
+  .floating-window .content::-webkit-scrollbar-thumb {
+    background: #ff00ff;
+    border-radius: 3px;
+  }
+
+  /* --- Чат-бот --- */
+  #chat-messages {
+    margin-bottom: 8px;
+  }
+  #chat-messages p {
+    margin: 6px 0;
+  }
+  #chat-messages p strong {
+    color: #ff00ff;
+  }
+  #chat-input-area {
+    display: flex;
+    border-top: 1px solid #ff00ff;
+  }
+  #chat-input {
+    flex-grow: 1;
+    padding: 8px;
+    border: none;
+    outline: none;
+    font-family: 'Orbitron', monospace;
+    font-size: 1rem;
+    background: #080818;
+    color: #00fff7;
+  }
+  #chat-send-btn {
+    background: #ff00ff;
+    border: none;
+    color: #00fff7;
+    padding: 0 18px;
+    cursor: pointer;
+    font-weight: 700;
+    transition: background 0.3s ease;
+  }
+  #chat-send-btn:hover {
+    background: #9d00ff;
+  }
+
+  /* --- Корзина --- */
+  #cart-list {
+    max-height: 220px;
+    overflow-y: auto;
+    margin-bottom: 12px;
+  }
+  #cart-list p {
+    margin: 6px 0;
+    border-bottom: 1px dotted #ff00ff;
+    padding-bottom: 4px;
+  }
+  #cart-total {
+    font-weight: 700;
+    margin-bottom: 12px;
+    text-align: right;
+    font-size: 1.1rem;
+  }
+  #order-form input {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border-radius: 6px;
+    border: 1px solid #ff00ff;
+    background: #080818;
+    color: #00fff7;
+    font-family: 'Orbitron', monospace;
+    font-size: 0.9rem;
+  }
+  #order-form button {
+    width: 100%;
+    padding: 10px;
+    background: linear-gradient(45deg, #ff00ff, #9d00ff);
+    border: none;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: #00fff7;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  #order-form button:hover {
+    background: linear-gradient(45deg, #00fff7, #5500ff);
+  }
+
+  /* --- Звуки кликов --- */
+  button:active {
+    transform: scale(0.97);
+  }
+
+  /* --- Адаптив --- */
+  @media (max-width: 420px) {
+    .floating-window {
+      width: 90vw !important;
     }
-    #chatbot-trigger:hover {
-      transform: scale(1.1);
-    }
-    #chatbot-trigger i {
-      font-size: 2rem;
-      color: #000;
-    }
-    #chat-window {
-      position: fixed;
-      bottom: 90px;
-      right: 20px;
-      width: 320px;
-      max-height: 450px;
-      background: rgba(20, 10, 40, 0.95);
-      border-radius: 12px;
-      border: 1px solid #ff00ff;
-      box-shadow: 0 0 15px #ff00ff;
-      display: none;
-      flex-direction: column;
-      z-index: 1000;
-      overflow: hidden;
-      backdrop-filter: blur(10px);
-    }
-    #chat-header {
-      background: #ff00ff;
-      color: #00fff7;
-      padding: 10px 15px;
-      font-weight: bold;
-      font-size: 1.2rem;
-      text-align: center;
-      user-select: none;
-    }
-    #chat-messages {
-      flex: 1;
-      overflow-y: auto;
-      padding: 10px 15px;
-      color: #00fff7;
-      font-size: 0.9rem;
-    }
-    #chat-input-area {
-      display: flex;
-      border-top: 1px solid #ff00ff;
-      padding: 10px 15px;
-      background: rgba(30, 10, 60, 0.9);
-    }
-    #chat-input {
-      flex: 1;
-      padding: 8px;
-      font-size: 1rem;
-      border-radius: 6px;
-      border: 1px solid #00fff7;
-      background: #0f0f0f;
-      color: #00fff7;
-      outline: none;
-    }
-    #chat-send-btn {
-      margin-left: 8px;
-      background: #ff00ff;
-      border: none;
-      color: #00fff7;
-      font-weight: bold;
-      padding: 8px 15px;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: background 0.3s ease;
-    }
-    #chat-send-btn:hover {
-      background: #cc00cc;
-    }
-    /* Скролл внутри чата */
-    #chat-messages::-webkit-scrollbar {
-      width: 6px;
-    }
-    #chat-messages::-webkit-scrollbar-thumb {
-      background-color: #ff00ff;
-      border-radius: 3px;
-    }
-  </style>
-  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+  }
+</style>
 </head>
 <body>
-  <h1>NnnMop</h1>
-  <h3>Cyberpunk Food Terminal</h3>
 
+<!-- Киберпанк дождь (canvas) -->
+<canvas id="cyberRain"></canvas>
+
+<h1>NnnMop</h1>
+<h3>Cyberpunk Food Terminal</h3>
+
+<main>
   <div class="menu" id="menu"></div>
+</main>
 
-  <div id="cart"><h3>Корзина</h3><p>Пусто</p></div>
+<!-- Плавающая кнопка чат-бота -->
+<div class="floating-btn" id="chatbot-btn" title="Открыть чат">
+  <i class="fas fa-robot"></i>
+</div>
 
-  <form id="order">
-    <input type="text" placeholder="Ваше имя" required />
-    <input type="text" placeholder="Адрес доставки" required />
-    <input type="tel" placeholder="Телефон" required />
-    <button type="submit">Отправить заказ</button>
+<!-- Плавающая кнопка корзины -->
+<div class="floating-btn" id="cart-btn" title="Открыть корзину">
+  <i class="fas fa-shopping-cart"></i>
+  <span id="cart-count" style="position:absolute; top:-6px; right:-6px; background:#ff00ff; color:#080818; font-weight:700; font-size:0.8rem; border-radius:50%; width:18px; height:18px; display:flex; align-items:center; justify-content:center;">0</span>
+</div>
+
+<!-- Окно чат-бота -->
+<section class="floating-window" id="chatbot-window" aria-label="Чат с AI ассистентом">
+  <header>🤖 AI Ассистент
+    <button class="close-btn" aria-label="Закрыть чат">&times;</button>
+  </header>
+  <div class="content" id="chat-messages" tabindex="0">
+    <p><em>Привет! Я ваш цифровой помощник. Задайте вопрос или запросите помощь.</em></p>
+  </div>
+  <div id="chat-input-area">
+    <input type="text" id="chat-input" placeholder="Напишите сообщение..." aria-label="Поле ввода сообщения" />
+    <button id="chat-send-btn" aria-label="Отправить сообщение">▶</button>
+  </div>
+</section>
+
+<!-- Окно корзины -->
+<section class="floating-window" id="cart-window" aria-label="Корзина заказов">
+  <header>🛒 Ваша корзина
+    <button class="close-btn" aria-label="Закрыть корзину">&times;</button>
+  </header>
+  <div class="content" id="cart-list" tabindex="0">
+    <p>Корзина пуста</p>
+  </div>
+  <div id="cart-total">Итого: 0 NOK</div>
+  <form id="order-form" autocomplete="off">
+    <input type="text" id="order-name" name="name" placeholder="Ваше имя" required />
+    <input type="text" id="order-address" name="address" placeholder="Адрес доставки" required />
+    <input type="tel" id="order-phone" name="phone" placeholder="Телефон" required pattern="[\d\+\-\s]+" />
+    <button type="submit">Подтвердить заказ</button>
   </form>
+</section>
 
-  <!-- Кнопка вызова чат-бота -->
-  <div id="chatbot-trigger" title="Открыть чат-бот">
-    <i class="fas fa-robot"></i>
-  </div>
+<script>
+  // --- Анимация кибер-дождя на canvas ---
+  (() => {
+    const canvas = document.getElementById('cyberRain');
+    const ctx = canvas.getContext('2d');
+    let width, height;
+    let drops = [];
+    const maxDrops = 150;
 
-  <!-- Окно чат-бота -->
-  <div id="chat-window" role="region" aria-label="Чат с AI ассистентом">
-    <div id="chat-header">🤖 AI Ассистент</div>
-    <div id="chat-messages">
-      <p><em>Привет! Я ваш цифровой помощник. Задайте вопрос.</em></p>
-    </div>
-    <div id="chat-input-area">
-      <input id="chat-input" type="text" placeholder="Напишите сообщение..." />
-      <button id="chat-send-btn" aria-label="Отправить сообщение">Отправить</button>
-    </div>
-  </div>
+    function resize() {
+      width = window.innerWidth;
+      height = window.innerHeight;
+      canvas.width = width;
+      canvas.height = height;
+    }
+    window.addEventListener('resize', resize);
+    resize();
 
-  <script>
-    // Меню товаров
-    const menu = [
-      { name: 'Суши-сет', price: 300 },
-      { name: 'Пицца Маргарита', price: 200 },
-      { name: 'Бургер Классик', price: 180 },
-      { name: 'Тайская лапша', price: 250 },
-    ];
+    class Drop {
+      constructor() {
+        this.x = Math.random() * width;
+        this.y = Math.random() * height;
+        this.length = 10 + Math.random() * 20;
+        this.speed = 4 + Math.random() * 4;
+        this.opacity = 0.1 + Math.random() * 0.4;
+        this.width = 1;
+      }
+      fall() {
+        this.y += this.speed;
+        if (this.y > height) {
+          this.y = -this.length;
+          this.x = Math.random() * width;
+        }
+      }
+      draw() {
+        ctx.beginPath();
+        const gradient = ctx.createLinearGradient(this.x, this.y, this.x, this.y + this.length);
+        gradient.addColorStop(0, `rgba(0, 255, 255, ${this.opacity})`);
+        gradient.addColorStop(1, 'rgba(0, 255, 255, 0)');
+        ctx.strokeStyle = gradient;
+        ctx.lineWidth = this.width;
+        ctx.moveTo(this.x, this.y);
+        ctx.lineTo(this.x, this.y + this.length);
+        ctx.stroke();
+      }
+    }
 
-    const menuDiv = document.getElementById('menu');
-    const cartDiv = document.getElementById('cart');
-    const orderForm = document.getElementById('order');
+    for (let i = 0; i < maxDrops; i++) {
+      drops.push(new Drop());
+    }
 
-    let cart = [];
+    function animate() {
+      ctx.clearRect(0, 0, width, height);
+      drops.forEach(drop => {
+        drop.fall();
+        drop.draw();
+      });
+      requestAnimationFrame(animate);
+    }
+    animate();
+  })();
 
-    // Создаем карточки меню
-    menu.forEach((item, index) => {
+  // --- Меню ---
+  const menu = [
+    { name: 'Суши-сет', price: 300 },
+    { name: 'Пицца Маргарита', price: 200 },
+    { name: 'Бургер Классик', price: 180 },
+    { name: 'Тайская лапша', price: 250 },
+    { name: 'Кибер роллы', price: 320 },
+    { name: 'Неоновый напиток', price: 120 }
+  ];
+
+  const menuDiv = document.getElementById('menu');
+  const cartList = document.getElementById('cart-list');
+  const cartTotalDiv = document.getElementById('cart-total');
+  const cartCountSpan = document.getElementById('cart-count');
+
+  let cart = [];
+
+  function renderMenu() {
+    menu.forEach((item, i) => {
       const div = document.createElement('div');
-      div.className = 'item';
-      div.innerHTML = `<h4>${item.name}</h4><p>${item.price} NOK</p><button onclick="addToCart(${index})">Добавить</button>`;
+      div.classList.add('menu-item');
+      div.innerHTML = `
+        <h4>${item.name}</h4>
+        <p>${item.price} NOK</p>
+        <button aria-label="Добавить ${item.name} в корзину" data-index="${i}">Добавить</button>
+      `;
       menuDiv.appendChild(div);
     });
+  }
+  renderMenu();
 
-    // Добавить товар в корзину
-    function addToCart(index) {
-      cart.push(menu[index]);
-      updateCart();
+  // Добавление в корзину
+  menuDiv.addEventListener('click', e => {
+    if (e.target.tagName === 'BUTTON') {
+      const idx = +e.target.dataset.index;
+      cart.push(menu[idx]);
+      updateCartUI();
+      playClickSound();
     }
+  });
 
-    // Обновить отображение корзины
-    function updateCart() {
-      if (cart.length === 0) {
-        cartDiv.innerHTML = '<h3>Корзина</h3><p>Пусто</p>';
-        return;
-      }
-      cartDiv.innerHTML = '<h3>Корзина</h3>' +
-        cart.map(item => `<p>${item.name} - ${item.price} NOK</p>`).join('') +
-        `<p><strong>Итого:</strong> ${cart.reduce((sum, item) => sum + item.price, 0)} NOK</p>`;
+  // Обновление UI корзины
+  function updateCartUI() {
+    if (cart.length === 0) {
+      cartList.innerHTML = '<p>Корзина пуста</p>';
+      cartTotalDiv.textContent = 'Итого: 0 NOK';
+      cartCountSpan.textContent = '0';
+      return;
     }
-
-    // Обработка отправки формы заказа
-    orderForm.addEventListener('submit', e => {
-      e.preventDefault();
-      if (cart.length === 0) {
-        alert('Корзина пуста! Добавьте товар перед заказом.');
-        return;
-      }
-      alert('Спасибо за заказ! Мы свяжемся с вами в ближайшее время.');
-      cart = [];
-      updateCart();
-      orderForm.reset();
-    });
-
-    // Чат-бот логика
-    const chatbotTrigger = document.getElementById('chatbot-trigger');
-    const chatWindow = document.getElementById('chat-window');
-    const chatMessages = document.getElementById('chat-messages');
-    const chatInput = document.getElementById('chat-input');
-    const chatSendBtn = document.getElementById('chat-send-btn');
-
-    chatbotTrigger.addEventListener('click', () => {
-      if (chatWindow.style.display === 'flex') {
-        chatWindow.style.display = 'none';
-      } else {
-        chatWindow.style.display = 'flex';
-        chatInput.focus();
-      }
-    });
-
-    chatSendBtn.addEventListener('click', sendMessage);
-    chatInput.addEventListener('keydown', e => {
-      if (e.key === 'Enter') {
-        sendMessage();
-      }
-    });
-
-    function sendMessage() {
-      const msg = chatInput.value.trim();
-      if (!msg) return;
-      addChatMessage('Вы', msg);
-      chatInput.value = '';
-
-      // Ответ ИИ (заглушка)
-      setTimeout(() => {
-        const reply = generateAIReply(msg);
-        addChatMessage('ИИ', reply);
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-      }, 700);
-    }
-
-    function addChatMessage(sender, text) {
+    cartList.innerHTML = '';
+    cart.forEach((item, idx) => {
       const p = document.createElement('p');
-      p.innerHTML = `<strong>${sender}:</strong> ${text}`;
-      chatMessages.appendChild(p);
-      chatMessages.scrollTop = chatMessages.scrollHeight;
-    }
+      p.textContent = `${item.name} - ${item.price} NOK`;
+      // Кнопка удалить
+      const delBtn = document.createElement('button');
+      delBtn.textContent = '×';
+      delBtn.title = 'Удалить товар';
+      delBtn.style = `
+        margin-left:8px;
+        background:#ff00ff;
+        color:#080818;
+        border:none;
+        font-weight:bold;
+        border-radius:50%;
+        width:22px;
+        height:22px;
+        cursor:pointer;
+      `;
+      delBtn.addEventListener('click', () => {
+        cart.splice(idx, 1);
+        updateCartUI();
+        playClickSound();
+      });
+      p.appendChild(delBtn);
+      cartList.appendChild(p);
+    });
+    const total = cart.reduce((sum, i) => sum + i.price, 0);
+    cartTotalDiv.textContent = `Итого: ${total} NOK`;
+    cartCountSpan.textContent = cart.length;
+  }
 
-    function generateAIReply(text) {
-      const msg = text.toLowerCase();
-      if (msg.includes('привет')) return 'Здравствуйте! Чем могу помочь?';
-      if (msg.includes('скидка')) return 'Скидка 5% доступна при участии в мини-игре!';
-      if (msg.includes('доставка')) return 'Мы доставляем за 30-45 минут в пределах города.';
-      return 'Извините, я пока не понимаю этот запрос. Попробуйте другой вопрос.';
+  // --- Показ и скрытие окон ---
+  const chatbotBtn = document.getElementById('chatbot-btn');
+  const chatbotWindow = document.getElementById('chatbot-window');
+  const cartBtn = document.getElementById('cart-btn');
+  const cartWindow = document.getElementById('cart-window');
+
+  chatbotBtn.addEventListener('click', () => {
+    if (chatbotWindow.style.display === 'flex') {
+      chatbotWindow.style.display = 'none';
+    } else {
+      chatbotWindow.style.display = 'flex';
+      chatbotWindow.style.zIndex = 1100;
     }
-  </script>
-</body>
-</html>
+  });
+  cartBtn.addEventListener('click', () => {
+    if (cartWindow.style.display === 'flex') {
+      cartWindow.style.display = 'none';
+    } else {
+      cartWindow.style.display = 'flex';
+      cartWindow.style.zIndex = 1100;
+    }
+  });
+
+  // Кнопки закрытия окон
