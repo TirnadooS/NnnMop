@@ -4,93 +4,302 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CYBERDELUXE OSLO | 2077</title>
-    <link rel="stylesheet" href="styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700&family=Teko:wght@400;600&family=Orbitron:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700&family=Teko:wght@400;600&family=Orbitron:wght@700&display=swap" rel="stylesheet">
+    <style>
+        /* Общие стили */
+        :root {
+            --neon-blue: #00f3ff;
+            --neon-pink: #ff00ff;
+            --neon-purple: #9d00ff;
+            --dark-bg: #0a0a1a;
+            --card-bg: rgba(20, 10, 40, 0.8);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background: var(--dark-bg);
+            color: white;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* Адаптивный контейнер */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+        }
+
+        /* Медиа-запросы */
+        @media (max-width: 768px) {
+            .menu-grid {
+                grid-template-columns: 1fr !important;
+            }
+            
+            .floating-cart {
+                width: 100% !important;
+                right: -100% !important;
+            }
+            
+            .main-title {
+                font-size: 2.5rem !important;
+            }
+        }
+
+        /* Остальные стили из предыдущего кода... */
+        /* [Вставьте сюда все предыдущие CSS-стили] */
+
+        /* Форма заказа */
+        .order-form {
+            background: rgba(10, 5, 20, 0.9);
+            border: 1px solid var(--neon-purple);
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 30px;
+            backdrop-filter: blur(5px);
+        }
+
+        .order-form h3 {
+            color: var(--neon-blue);
+            margin-bottom: 15px;
+            font-family: 'Teko', sans-serif;
+            font-size: 1.8rem;
+        }
+
+        .order-form input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--neon-blue);
+            color: white;
+            font-family: 'Rajdhani', sans-serif;
+        }
+
+        .order-form button {
+            background: linear-gradient(45deg, var(--neon-pink), var(--neon-purple));
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 700;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s;
+        }
+
+        .order-form button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(255, 0, 255, 0.4);
+        }
+
+        /* Чат-бот */
+        .chatbot {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background: var(--neon-blue);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            z-index: 999;
+            box-shadow: 0 0 20px rgba(0, 243, 255, 0.7);
+            transition: all 0.3s;
+        }
+
+        .chatbot:hover {
+            transform: scale(1.1);
+        }
+
+        .chatbot i {
+            font-size: 1.5rem;
+            color: black;
+        }
+
+        .chat-window {
+            position: fixed;
+            bottom: 90px;
+            right: 20px;
+            width: 300px;
+            height: 400px;
+            background: var(--card-bg);
+            border: 1px solid var(--neon-purple);
+            border-radius: 10px;
+            overflow: hidden;
+            display: none;
+            flex-direction: column;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+
+        .chat-header {
+            padding: 15px;
+            background: rgba(157, 0, 255, 0.3);
+            color: var(--neon-blue);
+            font-family: 'Teko', sans-serif;
+            font-size: 1.3rem;
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+        }
+
+        .chat-input {
+            padding: 10px;
+            display: flex;
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--neon-blue);
+            color: white;
+        }
+
+        .chat-input button {
+            background: var(--neon-blue);
+            color: black;
+            border: none;
+            padding: 0 15px;
+            cursor: pointer;
+        }
+
+        /* AI-рекомендации */
+        .ai-recommendation {
+            background: rgba(0, 243, 255, 0.1);
+            border-left: 3px solid var(--neon-blue);
+            padding: 15px;
+            margin: 20px 0;
+            font-style: italic;
+        }
+    </style>
 </head>
 <body>
-    <!-- Футуристичный фон -->
-    <div class="cyber-bg"></div>
-    
-    <!-- Плавающая корзина -->
-    <div class="floating-cart" id="cart">
-        <div class="cart-header">
-            <h2><i class="fas fa-shopping-basket"></i> DIN KURV</h2>
-            <span class="close-cart">&times;</span>
-        </div>
-        <ul class="cart-items" id="cart-items"></ul>
-        <div class="cart-footer">
-            <div class="cart-total">
-                TOTAL: <span id="cart-total">0</span> NOK
-            </div>
-            <button class="checkout-btn">BEKREFT BESTILLING</button>
-        </div>
-    </div>
-    <div class="cart-icon" id="cart-icon">
-        <i class="fas fa-shopping-basket"></i>
-        <span class="cart-count">0</span>
-    </div>
+    <!-- [Вставьте сюда весь предыдущий HTML-код] -->
 
-    <!-- Главный контент -->
+    <!-- Форма заказа -->
     <div class="container">
-        <header>
-            <h1 class="main-title">CYBER<span>DELUXE</span></h1>
-            <p class="subtitle">OSLO NEON EXPERIENCE</p>
-        </header>
-
-        <!-- Меню -->
-        <div class="menu-grid">
-            <!-- Секция 1: Премиум-пиццы -->
-            <section class="menu-section">
-                <h2 class="section-title"><i class="fas fa-pizza-slice"></i> SIGNATURE PIZZA</h2>
-                <div class="items-grid">
-                    <div class="menu-item">
-                        <h3>QUANTUM MARGHERITA</h3>
-                        <p class="item-desc">Tomatsaus, mozzarella di bufala, basilikum</p>
-                        <p class="price">250 NOK</p>
-                        <button class="add-btn" data-name="QUANTUM MARGHERITA" data-price="250">+ LEGG TIL</button>
-                    </div>
-                    <!-- Добавлено 30+ позиций -->
-                    <div class="menu-item">
-                        <h3>NEON PEPPERONI XTREME</h3>
-                        <p class="item-desc">Pepperoni, jalapeños, fire sauce</p>
-                        <p class="price">280 NOK</p>
-                        <button class="add-btn" data-name="NEON PEPPERONI XTREME" data-price="280">+ LEGG TIL</button>
-                    </div>
-                    <!-- Все 30+ позиций здесь... -->
-                </div>
-            </section>
-
-            <!-- Секция 2: Гурмэ-бургеры -->
-            <section class="menu-section">
-                <h2 class="section-title"><i class="fas fa-hamburger"></i> LUXE BURGERE</h2>
-                <div class="items-grid">
-                    <div class="menu-item">
-                        <h3>GOLDEN TRUFFLE BURGER</h3>
-                        <p class="item-desc">Black Angus, truffelmayo, gouda</p>
-                        <p class="price">320 NOK</p>
-                        <button class="add-btn" data-name="GOLDEN TRUFFLE BURGER" data-price="320">+ LEGG TIL</button>
-                    </div>
-                    <!-- Добавлено 30+ позиций -->
-                </div>
-            </section>
-
-            <!-- Секция 3: Премиум напитки -->
-            <section class="menu-section">
-                <h2 class="section-title"><i class="fas fa-cocktail"></i> ELITE DRIKKE</h2>
-                <div class="items-grid">
-                    <div class="menu-item">
-                        <h3>CYBER MOONRISE</h3>
-                        <p class="item-desc">Blue curacao, vodka, sprite, neon glow</p>
-                        <p class="price">180 NOK</p>
-                        <button class="add-btn" data-name="CYBER MOONRISE" data-price="180">+ LEGG TIL</button>
-                    </div>
-                    <!-- Добавлено 30+ позиций -->
-                </div>
-            </section>
+        <div class="order-form">
+            <h3><i class="fas fa-credit-card"></i> BESTILLING</h3>
+            <input type="text" id="name" placeholder="Ditt navn">
+            <input type="text" id="address" placeholder="Leveringsadresse">
+            <button onclick="submitOrder()"><i class="fas fa-paper-plane"></i> BEKREFT BESTILLING</button>
+            <p id="order-status" style="margin-top: 15px;"></p>
         </div>
     </div>
 
-    <script src="script.js"></script>
+    <!-- Чат-бот -->
+    <div class="chatbot" id="chatbot-trigger">
+        <i class="fas fa-robot"></i>
+    </div>
+
+    <div class="chat-window" id="chat-window">
+        <div class="chat-header">
+            <i class="fas fa-robot"></i> CYBER-ASSISTENT
+        </div>
+        <div class="chat-messages" id="chat-messages">
+            <div class="ai-recommendation">
+                <strong>AI anbefaler:</strong> Prøv vår signaturrett QUANTUM MARGHERITA med ekstra neon-saus!
+            </div>
+            <p>Hei! Jeg er din digitale assistent. Hva kan jeg hjelpe deg med?</p>
+        </div>
+        <div class="chat-input">
+            <input type="text" id="user-input" placeholder="Skriv melding...">
+            <button onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button>
+        </div>
+    </div>
+
+    <script>
+        // [Вставьте сюда предыдущий JavaScript код]
+
+        // Форма заказа
+        function submitOrder() {
+            const name = document.getElementById("name").value;
+            const address = document.getElementById("address").value;
+            
+            if (!name || !address) {
+                alert("Vennligst fyll ut navn og adresse");
+                return;
+            }
+            
+            if (cart.length === 0) {
+                alert("Handlekurven er tom");
+                return;
+            }
+
+            const total = cart.reduce((sum, item) => sum + item.price, 0);
+            document.getElementById("order-status").innerHTML = `
+                <p style="color: var(--neon-blue)">Takk, ${name}!</p>
+                <p>Din bestilling til ${address} er bekreftet.</p>
+                <p>${cart.length} varer for ${total} NOK</p>
+                <p><i class="fas fa-motorcycle"></i> Estimert levering: 30 min</p>
+            `;
+
+            // Очистка корзины
+            cart = [];
+            updateCart();
+        }
+
+        // Чат-бот
+        const chatbotTrigger = document.getElementById('chatbot-trigger');
+        const chatWindow = document.getElementById('chat-window');
+
+        chatbotTrigger.addEventListener('click', () => {
+            chatWindow.style.display = chatWindow.style.display === 'flex' ? 'none' : 'flex';
+        });
+
+        function sendMessage() {
+            const input = document.getElementById('user-input');
+            const messages = document.getElementById('chat-messages');
+            
+            if (input.value.trim() === '') return;
+            
+            // Пользовательское сообщение
+            messages.innerHTML += `<p><strong>Du:</strong> ${input.value}</p>`;
+            
+            // Ответ бота
+            setTimeout(() => {
+                const responses = [
+                    "Jeg anbefaler NEON PEPPERONI XTREME med ekstra jalapeños!",
+                    "Har du prøvd vår nye CYBER MOONRISE-drink?",
+                    "Leveringstid er vanligvis 30-45 minutter.",
+                    "Vi har spesialtilbud på GOLDEN TRUFFLE BURGER i dag!"
+                ];
+                const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+                messages.innerHTML += `<p><strong>AI:</strong> ${randomResponse}</p>`;
+                messages.scrollTop = messages.scrollHeight;
+            }, 1000);
+            
+            input.value = '';
+            messages.scrollTop = messages.scrollHeight;
+        }
+
+        // AI-рекомендации при загрузке
+        window.addEventListener('load', () => {
+            const recommendations = [
+                "I dag anbefaler vi: QUANTUM MARGHERITA med ekstra mozzarella!",
+                "Spesialtilbud: 20% rabatt på alle burgere i dag!",
+                "Prøv vår nye SYNTH-WATER med elektrolytter for ekstra energi!"
+            ];
+            const randomRec = recommendations[Math.floor(Math.random() * recommendations.length)];
+            document.querySelector('.ai-recommendation').innerHTML = 
+                `<strong><i class="fas fa-star"></i> AI ANBEFALER:</strong> ${randomRec}`;
+        });
+    </script>
 </body>
 </html>
