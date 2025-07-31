@@ -32,7 +32,6 @@
             overflow: hidden;
         }
 
-        /* Видеофон */
         #video-bg {
             position: fixed;
             right: 0;
@@ -41,6 +40,7 @@
             min-height: 100%;
             z-index: -1;
             filter: brightness(0.3);
+            object-fit: cover;
         }
 
         .app-container {
@@ -49,7 +49,6 @@
             height: 100%;
         }
 
-        /* Навигационная панель */
         .navbar {
             display: flex;
             justify-content: space-between;
@@ -58,6 +57,8 @@
             background-color: rgba(0, 0, 0, 0.7);
             height: 70px;
             backdrop-filter: blur(5px);
+            position: relative;
+            z-index: 10;
         }
 
         .logo {
@@ -79,6 +80,7 @@
             background: rgba(255, 255, 255, 0.1);
             border-radius: 30px;
             padding: 5px 15px;
+            align-items: center;
         }
 
         .search-bar input {
@@ -88,6 +90,7 @@
             outline: none;
             font-size: 0.9rem;
             color: var(--light);
+            padding: 5px;
         }
 
         .search-bar button {
@@ -95,6 +98,7 @@
             border: none;
             cursor: pointer;
             color: var(--light-secondary);
+            padding: 5px;
         }
 
         .user-actions {
@@ -116,6 +120,7 @@
 
         .btn-premium:hover {
             transform: scale(1.05);
+            background: rgba(255, 255, 255, 0.1);
         }
 
         .user-profile img {
@@ -123,16 +128,15 @@
             height: 40px;
             border-radius: 50%;
             object-fit: cover;
+            cursor: pointer;
         }
 
-        /* Основной контент */
         .main-content {
             display: flex;
             flex: 1;
             overflow: hidden;
         }
 
-        /* Центральная область */
         .content-area {
             flex: 1;
             padding: 20px 30px;
@@ -148,6 +152,7 @@
         .featured-section h2, .recent-section h2 {
             font-size: 1.5rem;
             margin-bottom: 20px;
+            color: var(--light);
         }
 
         .tracks-grid {
@@ -174,6 +179,8 @@
             width: 100%;
             border-radius: 4px;
             margin-bottom: 10px;
+            aspect-ratio: 1/1;
+            object-fit: cover;
         }
 
         .track-card h4 {
@@ -182,6 +189,7 @@
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            color: var(--light);
         }
 
         .track-card p {
@@ -189,7 +197,6 @@
             color: var(--light-secondary);
         }
 
-        /* Нижний плеер */
         .player-bar {
             height: 80px;
             background: rgba(40, 40, 40, 0.9);
@@ -198,6 +205,7 @@
             padding: 0 20px;
             border-top: 1px solid #333;
             backdrop-filter: blur(5px);
+            align-items: center;
         }
 
         .track-info {
@@ -205,17 +213,20 @@
             align-items: center;
             gap: 15px;
             flex: 0.3;
+            min-width: 200px;
         }
 
         .track-info img {
             width: 50px;
             height: 50px;
             border-radius: 4px;
+            object-fit: cover;
         }
 
         .track-details h4 {
             font-size: 0.9rem;
             margin-bottom: 3px;
+            color: var(--light);
         }
 
         .track-details p {
@@ -230,6 +241,7 @@
             font-size: 1rem;
             cursor: pointer;
             transition: all 0.2s;
+            padding: 5px;
         }
 
         .btn-like:hover {
@@ -242,6 +254,7 @@
             justify-content: center;
             align-items: center;
             flex: 0.4;
+            width: 100%;
         }
 
         .controls-main {
@@ -258,6 +271,7 @@
             font-size: 1rem;
             cursor: pointer;
             transition: all 0.2s;
+            padding: 5px;
         }
 
         .controls-main button:hover {
@@ -266,6 +280,18 @@
 
         .controls-main .btn-play {
             font-size: 1.5rem;
+            background: var(--light);
+            color: var(--dark);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .controls-main .btn-play:hover {
+            transform: scale(1.1);
         }
 
         .progress-container {
@@ -281,6 +307,7 @@
             background: #535353;
             border-radius: 2px;
             cursor: pointer;
+            position: relative;
         }
 
         .progress {
@@ -294,6 +321,8 @@
         .time-current, .time-total {
             font-size: 0.7rem;
             color: var(--light-secondary);
+            min-width: 40px;
+            text-align: center;
         }
 
         .extra-controls {
@@ -304,13 +333,30 @@
             justify-content: flex-end;
         }
 
-        /* Кнопка меню */
+        .extra-controls button {
+            background: transparent;
+            border: none;
+            color: var(--light-secondary);
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .volume-control {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .volume-control input {
+            width: 80px;
+        }
+
         .menu-btn {
             position: fixed;
             bottom: 90px;
             right: 20px;
-            width: 40px;
-            height: 40px;
+            width: 50px;
+            height: 50px;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -321,6 +367,7 @@
             cursor: pointer;
             z-index: 100;
             transition: all 0.3s;
+            border: none;
         }
 
         .menu-btn:hover {
@@ -346,12 +393,11 @@
             transform: translateY(-7px) rotate(-45deg);
         }
 
-        /* Боковое меню */
         .side-menu {
             position: fixed;
-            bottom: 140px;
+            bottom: 150px;
             right: 20px;
-            width: 200px;
+            width: 220px;
             background: rgba(0,0,0,0.9);
             border-radius: 10px;
             padding: 15px;
@@ -359,6 +405,7 @@
             transition: transform 0.3s;
             z-index: 99;
             backdrop-filter: blur(5px);
+            box-shadow: 0 0 15px rgba(0,0,0,0.5);
         }
 
         .side-menu.active {
@@ -369,6 +416,7 @@
             color: var(--primary);
             margin-bottom: 15px;
             font-size: 1rem;
+            text-align: center;
         }
 
         .side-menu ul {
@@ -383,6 +431,7 @@
             cursor: pointer;
             border-radius: 5px;
             transition: all 0.2s;
+            color: var(--light);
         }
 
         .side-menu li:hover {
@@ -394,12 +443,12 @@
             text-align: center;
         }
 
-        /* AI Ассистент */
         .ai-assistant {
             position: fixed;
             bottom: 90px;
             right: 20px;
             width: 350px;
+            max-width: 90%;
             background: rgba(40, 40, 40, 0.95);
             border-radius: 10px;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
@@ -425,6 +474,7 @@
 
         .ai-header h3 {
             font-size: 1rem;
+            color: var(--light);
         }
 
         .btn-close-ai {
@@ -432,6 +482,7 @@
             border: none;
             color: var(--light-secondary);
             cursor: pointer;
+            font-size: 1rem;
         }
 
         .ai-messages {
@@ -451,6 +502,9 @@
             border-radius: 18px;
             display: inline-block;
             max-width: 80%;
+            color: var(--light);
+            font-size: 0.9rem;
+            line-height: 1.4;
         }
 
         .ai-message.user p {
@@ -462,16 +516,18 @@
             display: flex;
             padding: 10px;
             border-top: 1px solid #333;
+            background: rgba(0,0,0,0.5);
         }
 
         .ai-input input {
             flex: 1;
-            background: rgba(0, 0, 0, 0.5);
+            background: rgba(255,255,255,0.1);
             border: none;
             border-radius: 20px;
             padding: 10px 15px;
             color: var(--light);
             outline: none;
+            font-size: 0.9rem;
         }
 
         .ai-input button {
@@ -490,7 +546,6 @@
             transform: scale(1.1);
         }
 
-        /* Модальное окно эквалайзера */
         .equalizer-modal {
             position: fixed;
             top: 0;
@@ -514,7 +569,7 @@
 
         .modal-content {
             background: rgba(40, 40, 40, 0.95);
-            width: 80%;
+            width: 90%;
             max-width: 500px;
             border-radius: 10px;
             overflow: hidden;
@@ -532,6 +587,7 @@
 
         .modal-header h3 {
             font-size: 1rem;
+            color: var(--light);
         }
 
         .btn-close-eq {
@@ -539,6 +595,7 @@
             border: none;
             color: var(--light-secondary);
             cursor: pointer;
+            font-size: 1rem;
         }
 
         .equalizer-bands {
@@ -546,6 +603,7 @@
             justify-content: center;
             gap: 20px;
             padding: 30px;
+            flex-wrap: wrap;
         }
 
         .band {
@@ -573,6 +631,7 @@
             gap: 10px;
             padding: 15px;
             border-top: 1px solid #333;
+            flex-wrap: wrap;
         }
 
         .preset-btn {
@@ -590,7 +649,6 @@
             background: var(--primary);
         }
 
-        /* Анимации */
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
@@ -606,7 +664,6 @@
             animation: pulse 1.5s infinite;
         }
 
-        /* Адаптивность */
         @media (max-width: 768px) {
             .navbar {
                 padding: 15px;
@@ -633,6 +690,7 @@
             
             .player-bar {
                 justify-content: center;
+                padding: 0 10px;
             }
             
             .track-info, .extra-controls {
@@ -641,11 +699,26 @@
             
             .player-controls {
                 flex: 1;
+                max-width: 100%;
+            }
+            
+            .controls-main {
+                gap: 10px;
+            }
+            
+            .controls-main .btn-play {
+                width: 35px;
+                height: 35px;
+                font-size: 1.2rem;
+            }
+            
+            .progress-container {
+                width: 100%;
             }
             
             .ai-assistant {
-                width: 90%;
-                right: 5%;
+                width: 95%;
+                right: 2.5%;
             }
             
             .side-menu {
@@ -653,16 +726,68 @@
                 bottom: 130px;
             }
         }
+
+        @media (max-width: 480px) {
+            .navbar {
+                padding: 10px;
+            }
+            
+            .search-bar {
+                margin: 0 10px;
+            }
+            
+            .btn-premium {
+                padding: 5px 10px;
+                font-size: 0.8rem;
+            }
+            
+            .user-profile img {
+                width: 35px;
+                height: 35px;
+            }
+            
+            .content-area {
+                padding: 10px;
+                padding-bottom: 80px;
+            }
+            
+            .featured-section h2, .recent-section h2 {
+                font-size: 1.2rem;
+                margin-bottom: 15px;
+            }
+            
+            .tracks-grid {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+                gap: 10px;
+            }
+            
+            .track-card {
+                padding: 10px;
+            }
+            
+            .player-bar {
+                height: 70px;
+            }
+            
+            .menu-btn {
+                width: 45px;
+                height: 45px;
+                bottom: 80px;
+            }
+            
+            .side-menu {
+                bottom: 120px;
+            }
+        }
     </style>
 </head>
 <body>
-    <!-- Видеофон -->
     <video autoplay muted loop id="video-bg">
         <source src="https://assets.mixkit.co/videos/preview/mixkit-neon-lights-on-a-dark-city-street-1080-large.mp4" type="video/mp4">
+        Ваш браузер не поддерживает видеофон.
     </video>
 
     <div class="app-container">
-        <!-- Навигационная панель -->
         <nav class="navbar">
             <div class="logo">
                 <i class="fas fa-headphones"></i>
@@ -672,82 +797,3 @@
                 <input type="text" placeholder="Поиск треков, альбомов, исполнителей...">
                 <button><i class="fas fa-search"></i></button>
             </div>
-            <div class="user-actions">
-                <button class="btn-premium">Premium</button>
-                <div class="user-profile">
-                    <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Профиль">
-                </div>
-            </div>
-        </nav>
-
-        <!-- Основной контент -->
-        <div class="main-content">
-            <!-- Центральная область -->
-            <main class="content-area">
-                <section class="featured-section">
-                    <h2>Рекомендуем вам</h2>
-                    <div class="tracks-grid">
-                        <!-- Треки будут добавляться через JS -->
-                    </div>
-                </section>
-
-                <section class="recent-section">
-                    <h2>Недавно прослушанные</h2>
-                    <div class="tracks-list">
-                        <!-- Недавние треки -->
-                    </div>
-                </section>
-            </main>
-        </div>
-
-        <!-- Нижний плеер -->
-        <div class="player-bar">
-            <div class="track-info">
-                <img src="https://i.scdn.co/image/ab67616d00001e02ff9ca10b55ce82ae553c8228" alt="Обложка">
-                <div class="track-details">
-                    <h4 class="track-title">Neon Dreams</h4>
-                    <p class="track-artist">Cyber Wave</p>
-                </div>
-                <button class="btn-like"><i class="far fa-heart"></i></button>
-            </div>
-
-            <div class="player-controls">
-                <div class="controls-main">
-                    <button class="btn-shuffle"><i class="fas fa-random"></i></button>
-                    <button class="btn-prev"><i class="fas fa-step-backward"></i></button>
-                    <button class="btn-play"><i class="fas fa-play"></i></button>
-                    <button class="btn-next"><i class="fas fa-step-forward"></i></button>
-                    <button class="btn-repeat"><i class="fas fa-redo"></i></button>
-                </div>
-                <div class="progress-container">
-                    <span class="time-current">0:00</span>
-                    <div class="progress-bar">
-                        <div class="progress"></div>
-                    </div>
-                    <span class="time-total">3:45</span>
-                </div>
-            </div>
-
-            <div class="extra-controls">
-                <button class="btn-queue"><i class="fas fa-list"></i></button>
-                <button class="btn-device"><i class="fas fa-mobile-alt"></i></button>
-                <div class="volume-control">
-                    <i class="fas fa-volume-down"></i>
-                    <input type="range" min="0" max="100" value="80">
-                    <i class="fas fa-volume-up"></i>
-                </div>
-            </div>
-        </div>
-
-        <!-- Кнопка меню (3 полоски) -->
-        <div class="menu-btn" id="menu-btn">
-            <div class="menu-line"></div>
-            <div class="menu-line"></div>
-            <div class="menu-line"></div>
-        </div>
-
-        <!-- Боковое меню -->
-        <div class="side-menu" id="side-menu">
-            <h3>Меню</h3>
-            <ul>
-                <li onclick="openEqualizer()"><i class="fas fa-s
