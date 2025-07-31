@@ -1,45 +1,77 @@
-body {
+* {
   margin: 0;
+  padding: 0;
+  box-sizing: border-box;
   font-family: 'Segoe UI', sans-serif;
+}
+
+body {
   background: black;
+  color: #00fff2;
   overflow: hidden;
-  color: #0ff;
 }
 
-#background {
+#cyber-rain {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: url('https://i.gifer.com/origin/f5/f5411b6f3080058d1bba19735ecad3f4.gif') center/cover no-repeat;
+  top: 0; left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: url('https://i.ibb.co/wNMZmZz/cyberrain.gif') center/cover no-repeat;
   z-index: -1;
-  opacity: 0.1;
-  animation: pulse 5s infinite alternate;
+  opacity: 0.15;
 }
 
-@keyframes pulse {
-  0% {opacity: 0.05;}
-  100% {opacity: 0.15;}
+header {
+  text-align: center;
+  padding: 20px;
+  color: #00fff2;
+  background: rgba(0, 0, 0, 0.6);
 }
 
 .window {
-  background: rgba(0, 0, 0, 0.8);
-  border: 1px solid #0ff;
-  padding: 1rem;
-  width: 280px;
   position: absolute;
-  top: 10%;
-  left: 10%;
+  background: rgba(0, 0, 0, 0.7);
+  border: 1px solid #00fff2;
   border-radius: 12px;
-  box-shadow: 0 0 20px #0ff;
-  cursor: move;
+  padding: 16px;
+  width: 300px;
+  color: #00fff2;
+  box-shadow: 0 0 10px #00fff2;
 }
 
-.track {
-  margin: 0.8rem 0;
+.floating-btn {
+  position: fixed;
+  bottom: 20px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: none;
+  background-color: #00fff2;
+  color: black;
+  font-size: 20px;
+  cursor: pointer;
+  box-shadow: 0 0 10px #00fff2;
+  z-index: 999;
 }
 
-.track input {
+#toggle-mixer { right: 80px; }
+#toggle-chatbot { right: 20px; }
+
+input {
   width: 100%;
+  padding: 6px;
+  margin-top: 10px;
+  background: black;
+  border: 1px solid #00fff2;
+  color: #00fff2;
+}
+
+button.slider-button {
+  margin-left: 8px;
+  cursor: pointer;
+}
+
+.slider {
+  width: 100%;
+  margin-top: 6px;
 }
