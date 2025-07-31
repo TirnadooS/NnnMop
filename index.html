@@ -3,51 +3,182 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NnnMop Player</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #121212;
-            color: white;
-            text-align: center;
-            padding: 50px;
-        }
-        audio {
-            width: 300px;
-            margin: 20px auto;
-        }
-        .song {
-            padding: 10px;
-            margin: 5px;
-            background: rgba(255,255,255,0.1);
-            cursor: pointer;
-        }
-    </style>
+    <title>NeonSound - Продвинутый музыкальный сервис</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&family=Orbitron:wght@500&display=swap" rel="stylesheet">
 </head>
 <body>
-    <h1>🎵 NnnMop Player</h1>
-    
-    <div id="playlist">
-        <div class="song" onclick="playSong(0)">Трек 1 - Neon Dreams</div>
-        <div class="song" onclick="playSong(1)">Трек 2 - Cyber Love</div>
+    <div class="app-container">
+        <!-- Навигационная панель -->
+        <nav class="navbar">
+            <div class="logo">
+                <i class="fas fa-headphones"></i>
+                <span>NeonSound</span>
+            </div>
+            <div class="search-bar">
+                <input type="text" placeholder="Поиск треков, альбомов, исполнителей...">
+                <button><i class="fas fa-search"></i></button>
+            </div>
+            <div class="user-actions">
+                <button class="btn-premium">Premium</button>
+                <div class="user-profile">
+                    <img src="assets/images/default-avatar.jpg" alt="Профиль">
+                </div>
+            </div>
+        </nav>
+
+        <!-- Основной контент -->
+        <div class="main-content">
+            <!-- Боковая панель -->
+            <aside class="sidebar">
+                <div class="menu-section">
+                    <h3>Меню</h3>
+                    <ul>
+                        <li class="active"><i class="fas fa-home"></i> Главная</li>
+                        <li><i class="fas fa-search"></i> Поиск</li>
+                        <li><i class="fas fa-book"></i> Моя медиатека</li>
+                        <li><i class="fas fa-plus-square"></i> Создать плейлист</li>
+                    </ul>
+                </div>
+
+                <div class="playlists-section">
+                    <h3>Ваши плейлисты</h3>
+                    <ul>
+                        <li><i class="fas fa-music"></i> Любимые треки</li>
+                        <li><i class="fas fa-heart"></i> Для тренировки</li>
+                        <li><i class="fas fa-moon"></i> Для сна</li>
+                    </ul>
+                </div>
+            </aside>
+
+            <!-- Центральная область -->
+            <main class="content-area">
+                <section class="featured-section">
+                    <h2>Рекомендуем вам</h2>
+                    <div class="tracks-grid">
+                        <!-- Треки будут добавляться через JS -->
+                    </div>
+                </section>
+
+                <section class="recent-section">
+                    <h2>Недавно прослушанные</h2>
+                    <div class="tracks-list">
+                        <!-- Недавние треки -->
+                    </div>
+                </section>
+            </main>
+        </div>
+
+        <!-- Нижний плеер -->
+        <div class="player-bar">
+            <div class="track-info">
+                <img src="assets/images/default-cover.jpg" alt="Обложка">
+                <div class="track-details">
+                    <h4 class="track-title">Название трека</h4>
+                    <p class="track-artist">Исполнитель</p>
+                </div>
+                <button class="btn-like"><i class="far fa-heart"></i></button>
+            </div>
+
+            <div class="player-controls">
+                <div class="controls-main">
+                    <button class="btn-shuffle"><i class="fas fa-random"></i></button>
+                    <button class="btn-prev"><i class="fas fa-step-backward"></i></button>
+                    <button class="btn-play"><i class="fas fa-play"></i></button>
+                    <button class="btn-next"><i class="fas fa-step-forward"></i></button>
+                    <button class="btn-repeat"><i class="fas fa-redo"></i></button>
+                </div>
+                <div class="progress-container">
+                    <span class="time-current">0:00</span>
+                    <div class="progress-bar">
+                        <div class="progress"></div>
+                    </div>
+                    <span class="time-total">3:45</span>
+                </div>
+            </div>
+
+            <div class="extra-controls">
+                <button class="btn-queue"><i class="fas fa-list"></i></button>
+                <button class="btn-device"><i class="fas fa-mobile-alt"></i></button>
+                <div class="volume-control">
+                    <i class="fas fa-volume-down"></i>
+                    <input type="range" min="0" max="100" value="80">
+                    <i class="fas fa-volume-up"></i>
+                </div>
+                <button class="btn-equalizer"><i class="fas fa-sliders-h"></i></button>
+                <button class="btn-ai" id="ai-assistant-btn"><i class="fas fa-robot"></i></button>
+            </div>
+        </div>
+
+        <!-- AI Ассистент -->
+        <div class="ai-assistant" id="ai-assistant">
+            <div class="ai-header">
+                <h3>Музыкальный помощник</h3>
+                <button class="btn-close-ai"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="ai-messages" id="ai-messages">
+                <div class="ai-message">
+                    <p>Привет! Я твой музыкальный помощник. Чем могу помочь?</p>
+                </div>
+            </div>
+            <div class="ai-input">
+                <input type="text" placeholder="Спросите у меня о музыке..." id="ai-input">
+                <button id="ai-send"><i class="fas fa-paper-plane"></i></button>
+            </div>
+        </div>
+
+        <!-- Модальное окно эквалайзера -->
+        <div class="equalizer-modal" id="equalizer-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Эквалайзер</h3>
+                    <button class="btn-close-eq"><i class="fas fa-times"></i></button>
+                </div>
+                <div class="equalizer-bands">
+                    <div class="band">
+                        <label>60Hz</label>
+                        <input type="range" min="-12" max="12" value="0" orient="vertical">
+                    </div>
+                    <div class="band">
+                        <label>150Hz</label>
+                        <input type="range" min="-12" max="12" value="0" orient="vertical">
+                    </div>
+                    <div class="band">
+                        <label>400Hz</label>
+                        <input type="range" min="-12" max="12" value="0" orient="vertical">
+                    </div>
+                    <div class="band">
+                        <label>1kHz</label>
+                        <input type="range" min="-12" max="12" value="0" orient="vertical">
+                    </div>
+                    <div class="band">
+                        <label>2.4kHz</label>
+                        <input type="range" min="-12" max="12" value="0" orient="vertical">
+                    </div>
+                    <div class="band">
+                        <label>6kHz</label>
+                        <input type="range" min="-12" max="12" value="0" orient="vertical">
+                    </div>
+                    <div class="band">
+                        <label>15kHz</label>
+                        <input type="range" min="-12" max="12" value="0" orient="vertical">
+                    </div>
+                </div>
+                <div class="presets">
+                    <button class="preset-btn" data-preset="flat">Плоский</button>
+                    <button class="preset-btn" data-preset="pop">Поп</button>
+                    <button class="preset-btn" data-preset="rock">Рок</button>
+                    <button class="preset-btn" data-preset="jazz">Джаз</button>
+                    <button class="preset-btn" data-preset="classical">Классика</button>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <audio id="audio" controls></audio>
-
-    <script>
-        // Плейлист с внешними ссылками на аудио
-        const playlist = [
-            "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
-            "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3"
-        ];
-
-        function playSong(index) {
-            document.getElementById("audio").src = playlist[index];
-            document.getElementById("audio").play();
-        }
-        
-        // Автовоспроизведение первого трека
-        playSong(0);
-    </script>
+    <script src="js/main.js"></script>
+    <script src="js/player.js"></script>
+    <script src="js/equalizer.js"></script>
+    <script src="js/ai.js"></script>
 </body>
 </html>
