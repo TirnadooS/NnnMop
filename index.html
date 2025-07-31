@@ -3,36 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Мой Плеер</title>
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>NnnMop Player</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #121212;
+            color: white;
+            text-align: center;
+            padding: 50px;
+        }
+        audio {
+            width: 300px;
+            margin: 20px auto;
+        }
+        .song {
+            padding: 10px;
+            margin: 5px;
+            background: rgba(255,255,255,0.1);
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
-    <header>
-        <div id="profile">
-            <img src="assets/images/avatar.jpg" alt="Аватар" id="avatar">
-            <span id="username">Гость</span>
-        </div>
-    </header>
+    <h1>🎵 NnnMop Player</h1>
+    
+    <div id="playlist">
+        <div class="song" onclick="playSong(0)">Трек 1 - Neon Dreams</div>
+        <div class="song" onclick="playSong(1)">Трек 2 - Cyber Love</div>
+    </div>
 
-    <main>
-        <div class="player-container">
-            <div id="playlist"></div>
-            <audio id="audio"></audio>
-            <div class="controls">
-                <button id="play-btn"><i class="fas fa-play"></i></button>
-                <input type="range" id="volume" min="0" max="1" step="0.1" value="0.7">
-            </div>
-        </div>
+    <audio id="audio" controls></audio>
 
-        <div id="ai-assistant">
-            <button id="ai-btn"><i class="fas fa-robot"></i></button>
-        </div>
-    </main>
+    <script>
+        // Плейлист с внешними ссылками на аудио
+        const playlist = [
+            "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
+            "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3"
+        ];
 
-    <script src="js/auth.js"></script>
-    <script src="js/player.js"></script>
-    <script src="js/eq.js"></script>
-    <script src="js/ai.js"></script>
+        function playSong(index) {
+            document.getElementById("audio").src = playlist[index];
+            document.getElementById("audio").play();
+        }
+        
+        // Автовоспроизведение первого трека
+        playSong(0);
+    </script>
 </body>
 </html>
