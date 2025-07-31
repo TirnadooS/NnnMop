@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Zen Relax</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="background"></div>
+
+  <div class="window draggable" id="mixer-window">
+    <h2>🎧 Звуковой Микшер</h2>
+    <div class="track" data-sound="alpha">Альфа-волны <input type="range" min="0" max="1" step="0.01" value="0.5"/></div>
+    <div class="track" data-sound="theta">Тета-волны <input type="range" min="0" max="1" step="0.01" value="0.5"/></div>
+    <div class="track" data-sound="delta">Дельта-волны <input type="range" min="0" max="1" step="0.01" value="0.5"/></div>
+    <div class="track" data-sound="rain">Дождь <input type="range" min="0" max="1" step="0.01" value="0.5"/></div>
+    <div class="track" data-sound="space">Космос <input type="range" min="0" max="1" step="0.01" value="0.5"/></div>
+  </div>
+
+  <div class="window draggable" id="ai-window">
+    <h2>🤖 Zen Ассистент</h2>
+    <p>Добро пожаловать! Я помогу тебе расслабиться. Просто включи нужные звуки и закрой глаза.</p>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
