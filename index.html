@@ -3,205 +3,48 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>O Relax | Zen Mixer</title>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap');
-    body {
-      margin: 0;
-      font-family: 'Orbitron', sans-serif;
-      background: radial-gradient(#0f0f1f, #000);
-      color: #fff;
-      overflow: hidden;
-    }
-
-    .background {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%;
-      height: 100%;
-      background: url('https://i.imgur.com/OvMZBs9.gif') center/cover no-repeat;
-      opacity: 0.1;
-      z-index: -1;
-    }
-
-    header {
-      text-align: center;
-      padding: 1rem;
-      font-size: 2rem;
-      color: #66ffcc;
-      letter-spacing: 1px;
-    }
-
-    .mixer {
-      display: grid;
-      grid-template-columns: repeat(6, 1fr);
-      gap: 20px;
-      padding: 20px;
-    }
-
-    .channel {
-      background: #111922cc;
-      border: 1px solid #66ffcc66;
-      border-radius: 16px;
-      padding: 1rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      backdrop-filter: blur(8px);
-    }
-
-    .circle-buttons {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 10px;
-      margin-top: 10px;
-    }
-
-    .sound-btn {
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      background: #66ffcc33;
-      border: 2px solid #66ffcc;
-      color: #66ffcc;
-      font-size: 0.8rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      transition: 0.2s;
-    }
-
-    .sound-btn:hover {
-      background: #66ffcc88;
-    }
-
-    .volume {
-      width: 80%;
-      margin-top: 1rem;
-    }
-
-    .floating {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      width: 300px;
-      background: #111922f2;
-      border-radius: 16px;
-      padding: 1rem;
-      border: 1px solid #66ffcc66;
-      z-index: 1000;
-      backdrop-filter: blur(10px);
-      cursor: move;
-    }
-
-    .floating h3 {
-      margin-top: 0;
-      color: #66ffcc;
-    }
-
-    .chat-icon,
-    .cart-icon {
-      position: fixed;
-      bottom: 20px;
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      background: #66ffcc;
-      color: black;
-      font-weight: bold;
-      font-size: 1.5rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      z-index: 1001;
-    }
-
-    .chat-icon { right: 20px; }
-    .cart-icon { right: 80px; }
-
-    .hidden { display: none; }
-  </style>
+  <title>Zen Frequencies Mixer</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="background"></div>
-  <header>O RELAX | ZEN MIXER</header>
+  <div id="background"></div>
 
-  <section class="mixer" id="mixer">
-    <!-- 6 колонок -->
-    ${[...Array(6)].map((_, i) => `
-      <div class="channel" data-channel="${i}">
-        <strong>Channel ${i + 1}</strong>
-        <input type="range" class="volume" min="0" max="1" step="0.01" value="0.5">
-        <div class="circle-buttons">
-          ${[
-            { name: "432Hz", src: "https://cdn.pixabay.com/audio/2022/03/29/audio_7fd38cf2cd.mp3" },
-            { name: "528Hz", src: "https://cdn.pixabay.com/audio/2023/01/28/audio_58c93ec866.mp3" },
-            { name: "Rain", src: "https://cdn.pixabay.com/audio/2021/07/27/audio_7e5f214982.mp3" },
-            { name: "Fire", src: "https://cdn.pixabay.com/audio/2022/02/23/audio_66fa43e1a0.mp3" }
-          ].map(sound => `
-            <div class="sound-btn" onclick="playSound(${i}, '${sound.src}')">${sound.name}</div>
-          `).join('')}
-        </div>
-      </div>
-    `).join('')}
+  <header>
+    <h1>ZEN FREQUENCIES</h1>
+  </header>
+
+  <main class="mixer">
+    <!-- 6 столбцов -->
+    <div class="channel" id="channel1"></div>
+    <div class="channel" id="channel2"></div>
+    <div class="channel" id="channel3"></div>
+    <div class="channel" id="channel4"></div>
+    <div class="channel" id="channel5"></div>
+    <div class="channel" id="channel6"></div>
+  </main>
+
+  <!-- Кнопки звуков -->
+  <section class="sound-buttons">
+    <button onclick="playSound('528hz')">528 Hz</button>
+    <button onclick="playSound('396hz')">396 Hz</button>
+    <button onclick="playSound('rain')">Дождь</button>
+    <button onclick="playSound('wind')">Ветер</button>
+    <button onclick="playSound('fire')">Огонь</button>
+    <!-- Добавим ещё позже -->
   </section>
 
-  <!-- Плавающее окно чат-бота -->
-  <div class="floating hidden" id="chat">
-    <h3>🤖 Zen-бот</h3>
-    <p>Привет! Я помогу тебе собрать идеальный звуковой микс для сна.</p>
+  <!-- Чат-бот -->
+  <div id="chatbot" class="floating draggable">
+    <div class="title-bar">Zen-бот 🤖</div>
+    <div class="content">Чем могу помочь?</div>
   </div>
 
-  <!-- Иконки -->
-  <div class="chat-icon" onclick="toggleWindow('chat')">💬</div>
-  <div class="cart-icon" onclick="alert('Функция корзины в разработке')">🛒</div>
+  <!-- Корзина -->
+  <div id="cart" class="floating draggable">
+    <div class="title-bar">🎧 Микс</div>
+    <div class="content">Выбранные звуки появятся здесь</div>
+  </div>
 
-  <script>
-    const channels = [];
-
-    function playSound(channelIndex, src) {
-      if (channels[channelIndex]) {
-        channels[channelIndex].pause();
-      }
-      const audio = new Audio(src);
-      const volumeSlider = document.querySelectorAll('.volume')[channelIndex];
-      audio.volume = volumeSlider.value;
-      audio.loop = true;
-      audio.play();
-      channels[channelIndex] = audio;
-
-      volumeSlider.oninput = () => {
-        if (channels[channelIndex]) channels[channelIndex].volume = volumeSlider.value;
-      };
-    }
-
-    function toggleWindow(id) {
-      const el = document.getElementById(id);
-      el.classList.toggle('hidden');
-    }
-
-    // Перетаскивание окон
-    document.querySelectorAll('.floating').forEach(el => {
-      let isDragging = false, offsetX = 0, offsetY = 0;
-
-      el.addEventListener('mousedown', e => {
-        isDragging = true;
-        offsetX = e.clientX - el.offsetLeft;
-        offsetY = e.clientY - el.offsetTop;
-      });
-
-      window.addEventListener('mousemove', e => {
-        if (isDragging) {
-          el.style.left = (e.clientX - offsetX) + 'px';
-          el.style.top = (e.clientY - offsetY) + 'px';
-        }
-      });
-
-      window.addEventListener('mouseup', () => isDragging = false);
-    });
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
