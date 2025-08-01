@@ -3,48 +3,259 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Zen Frequencies Mixer</title>
-  <link rel="stylesheet" href="style.css" />
+  <title>Zen Mixer • Sleep & Relax</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(180deg, #dbeafe, #f0fdf4);
+      color: #111;
+      overflow: hidden;
+      height: 100vh;
+    }
+
+    header {
+      padding: 1rem 2rem;
+      font-size: 1.8rem;
+      font-weight: bold;
+      color: #111;
+      background: rgba(255, 255, 255, 0.6);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 0 10px rgba(0,0,0,0.05);
+    }
+
+    main {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2rem;
+      padding: 2rem;
+    }
+
+    .mixer {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 1rem;
+      width: 100%;
+      max-width: 1200px;
+    }
+
+    .channel {
+      background: #fff;
+      padding: 1rem;
+      border-radius: 1rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .sound-button {
+      border: none;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      background: #c7d2fe;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .sound-button.active {
+      background: #2563eb;
+    }
+
+    .volume {
+      width: 100%;
+    }
+
+    .floating {
+      position: fixed;
+      background: white;
+      border-radius: 1rem;
+      box-shadow: 0 0 20px rgba(0,0,0,0.15);
+      padding: 1rem;
+      z-index: 999;
+      width: 300px;
+      height: 300px;
+      overflow: auto;
+    }
+
+    #chatbot, #cart {
+      display: none;
+    }
+
+    .floating-header {
+      font-weight: bold;
+      margin-bottom: 1rem;
+      cursor: move;
+    }
+
+    .floating-icon {
+      position: fixed;
+      bottom: 20px;
+      width: 50px;
+      height: 50px;
+      background: #2563eb;
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 50%;
+      font-size: 24px;
+      cursor: pointer;
+      box-shadow: 0 0 10px rgba(0,0,0,0.3);
+      z-index: 1000;
+    }
+
+    #chat-icon {
+      left: 20px;
+    }
+
+    #cart-icon {
+      right: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .mixer {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  </style>
 </head>
 <body>
-  <div id="background"></div>
-
-  <header>
-    <h1>ZEN FREQUENCIES</h1>
-  </header>
-
-  <main class="mixer">
-    <!-- 6 столбцов -->
-    <div class="channel" id="channel1"></div>
-    <div class="channel" id="channel2"></div>
-    <div class="channel" id="channel3"></div>
-    <div class="channel" id="channel4"></div>
-    <div class="channel" id="channel5"></div>
-    <div class="channel" id="channel6"></div>
+  <header>Zen Mixer</header>
+  <main>
+    <div class="mixer" id="mixer"></div>
   </main>
 
-  <!-- Кнопки звуков -->
-  <section class="sound-buttons">
-    <button onclick="playSound('528hz')">528 Hz</button>
-    <button onclick="playSound('396hz')">396 Hz</button>
-    <button onclick="playSound('rain')">Дождь</button>
-    <button onclick="playSound('wind')">Ветер</button>
-    <button onclick="playSound('fire')">Огонь</button>
-    <!-- Добавим ещё позже -->
-  </section>
-
-  <!-- Чат-бот -->
-  <div id="chatbot" class="floating draggable">
-    <div class="title-bar">Zen-бот 🤖</div>
-    <div class="content">Чем могу помочь?</div>
+  <!-- Floating Windows -->
+  <div id="chatbot" class="floating">
+    <div class="floating-header">AI Assistant</div>
+    <div>Пиши свой вопрос, и я помогу подобрать идеальные звуки!</div>
   </div>
 
-  <!-- Корзина -->
-  <div id="cart" class="floating draggable">
-    <div class="title-bar">🎧 Микс</div>
-    <div class="content">Выбранные звуки появятся здесь</div>
+  <div id="cart" class="floating">
+    <div class="floating-header">Микс</div>
+    <div id="presetList">Пока нет сохранённых миксов.</div>
+    <button onclick="savePreset()">💾 Сохранить микс</button>
   </div>
 
-  <script src="script.js"></script>
+  <!-- Icons -->
+  <div id="chat-icon" class="floating-icon" onclick="toggleWindow('chatbot')">💬</div>
+  <div id="cart-icon" class="floating-icon" onclick="toggleWindow('cart')">🛒</div>
+
+  <script>
+    const sounds = [
+      { name: "Rain", src: "https://cdn.pixabay.com/audio/2021/09/03/audio_57d343a7db.mp3" },
+      { name: "Fire", src: "https://cdn.pixabay.com/audio/2021/08/04/audio_90e1b7b01e.mp3" },
+      { name: "Wind", src: "https://cdn.pixabay.com/audio/2022/02/10/audio_2fdf50766e.mp3" },
+      { name: "Brown Noise", src: "https://cdn.pixabay.com/audio/2022/08/04/audio_28b2fc9b41.mp3" },
+      { name: "432 Hz", src: "https://cdn.pixabay.com/audio/2022/03/16/audio_d2c226a019.mp3" },
+      { name: "528 Hz", src: "https://cdn.pixabay.com/audio/2021/11/24/audio_3f8372c709.mp3" },
+      { name: "Thunder", src: "https://cdn.pixabay.com/audio/2022/01/14/audio_75a0cb0d0a.mp3" },
+      { name: "Ocean", src: "https://cdn.pixabay.com/audio/2022/08/25/audio_befae1a04f.mp3" },
+      { name: "Night", src: "https://cdn.pixabay.com/audio/2022/06/12/audio_d4e0c77d7b.mp3" },
+      { name: "Deep 963Hz", src: "https://cdn.pixabay.com/audio/2022/11/03/audio_a519ba8e83.mp3" }
+    ];
+
+    const mixer = document.getElementById("mixer");
+    const players = [];
+
+    for (let i = 0; i < 6; i++) {
+      const channel = document.createElement("div");
+      channel.className = "channel";
+
+      const audioElements = sounds.map(sound => {
+        const audio = new Audio(sound.src);
+        audio.loop = true;
+        return audio;
+      });
+
+      sounds.forEach((sound, idx) => {
+        const btn = document.createElement("button");
+        btn.className = "sound-button";
+        btn.title = sound.name;
+        btn.innerText = "♪";
+        btn.onclick = () => {
+          if (btn.classList.contains("active")) {
+            audioElements[idx].pause();
+            btn.classList.remove("active");
+          } else {
+            audioElements[idx].volume = 0.5;
+            audioElements[idx].play();
+            btn.classList.add("active");
+          }
+        };
+        channel.appendChild(btn);
+      });
+
+      const volumeSlider = document.createElement("input");
+      volumeSlider.type = "range";
+      volumeSlider.min = 0;
+      volumeSlider.max = 1;
+      volumeSlider.step = 0.01;
+      volumeSlider.value = 0.5;
+      volumeSlider.className = "volume";
+      volumeSlider.oninput = () => {
+        audioElements.forEach(a => {
+          if (!a.paused) a.volume = volumeSlider.value;
+        });
+      };
+
+      channel.appendChild(volumeSlider);
+      mixer.appendChild(channel);
+    }
+
+    // Floating windows logic
+    function toggleWindow(id) {
+      const el = document.getElementById(id);
+      el.style.display = el.style.display === "none" ? "block" : "none";
+    }
+
+    makeDraggable(document.getElementById("chatbot"));
+    makeDraggable(document.getElementById("cart"));
+
+    function makeDraggable(el) {
+      let isDragging = false;
+      let offsetX = 0;
+      let offsetY = 0;
+
+      el.querySelector(".floating-header").addEventListener("mousedown", (e) => {
+        isDragging = true;
+        offsetX = e.clientX - el.offsetLeft;
+        offsetY = e.clientY - el.offsetTop;
+        document.addEventListener("mousemove", move);
+        document.addEventListener("mouseup", stop);
+      });
+
+      function move(e) {
+        if (isDragging) {
+          el.style.left = `${e.clientX - offsetX}px`;
+          el.style.top = `${e.clientY - offsetY}px`;
+        }
+      }
+
+      function stop() {
+        isDragging = false;
+        document.removeEventListener("mousemove", move);
+        document.removeEventListener("mouseup", stop);
+      }
+    }
+
+    // Preset saving
+    function savePreset() {
+      const presetName = prompt("Название микса:");
+      if (!presetName) return;
+      const presetList = document.getElementById("presetList");
+      const div = document.createElement("div");
+      div.innerText = "💿 " + presetName;
+      presetList.appendChild(div);
+    }
+  </script>
 </body>
 </html>
