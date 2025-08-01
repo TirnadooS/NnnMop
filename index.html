@@ -1,38 +1,147 @@
-<!DOCTYPE html>
-<html lang="ru">
+<!DOCTYPE html><html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SoundRelax — Микшер для сна</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>O Relax Sound Mixer</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', sans-serif;
+    }body {
+  background: linear-gradient(145deg, #dfe9f3, #ffffff);
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+h1 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+.mixer {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 1rem;
+  width: 90vw;
+  max-width: 1200px;
+}
+
+.channel {
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.sound-btn {
+  background-color: #f0f4f8;
+  border: none;
+  border-radius: 50%;
+  padding: 20px;
+  margin: 10px 0;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.sound-btn:hover {
+  background-color: #d3e0ef;
+}
+
+.volume {
+  width: 100%;
+}
+
+.label {
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+  color: #666;
+}
+
+  </style>
 </head>
 <body>
-    <div class="container">
-        <h1>SoundRelax</h1>
-        <p>Микшер звуков для релаксации и сна</p>
-        
-        <div class="sound-mixer">
-            <!-- Звуковая карточка 1 -->
-            <div class="sound-card">
-                <h3>Ночной ветер</h3>
-                <input type="range" class="volume-slider" min="0" max="100" value="50">
-                <audio src="sounds/wind.mp3" loop></audio>
-            </div>
-            
-            <!-- Звуковая карточка 2 -->
-            <div class="sound-card">
-                <h3>Дождь</h3>
-                <input type="range" class="volume-slider" min="0" max="100" value="50">
-                <audio src="sounds/rain.mp3" loop></audio>
-            </div>
-            
-            <!-- Добавь больше звуков по аналогии -->
-        </div>
-        
-        <button id="play-all">Включить все</button>
-        <button id="stop-all">Остановить</button>
-    </div>
-    
-    <script src="script.js"></script>
-</body>
+  <h1>Relax Sound Mixer</h1>
+  <div class="mixer" id="mixer"></div>  <script>
+    const sounds = [
+      { label: '432 Hz', src: 'https://cdn.pixabay.com/download/audio/2023/03/01/audio_a47db0c2b0.mp3?filename=432hz-relaxation-tone-140774.mp3' },
+      { label: '528 Hz', src: 'https://cdn.pixabay.com/download/audio/2023/01/22/audio_6e1f896c3a.mp3?filename=528hz-healing-frequency-135416.mp3' },
+      { label: 'Rain', src: 'https://cdn.pixabay.com/download/audio/2022/03/31/audio_5d57b1a75d.mp3?filename=rain-ambient-110997.mp3' },
+      { label: 'Fireplace', src: 'https://cdn.pixabay.com/download/audio/2021/09/30/audio_a8a92b65c7.mp3?filename=fireplace-burning-ambient-109420.mp3' },
+      { label: 'Ocean Waves', src: 'https://cdn.pixabay.com/download/audio/2021/08/04/audio_34e4ffce4a.mp3?filename=relaxing-sea-waves-8793.mp3' },
+      { label: 'Wind', src: 'https://cdn.pixabay.com/download/audio/2021/10/26/audio_e203d2e758.mp3?filename=strong-wind-blowing-ambient-116484.mp3' }
+    ];
+
+    const mixer = document.getElementById('mixer');
+
+    for (let i = 0; i < 6; i++) {
+      const channel = document.createElement('div');
+      channel.className = 'channel';
+      const select = document.createElement('select');
+
+      sounds.forEach((sound, idx) => {
+        const option = document.createElement('option');
+        option.value = sound.src;
+        option.innerText = sound.label;
+        select.appendChild(option);
+      });
+
+      const playBtn = document.createElement('button');
+      playBtn.className = 'sound-btn';
+      playBtn.innerText = '▶️';
+
+      const audio = document.createElement('audio');
+      audio.loop = true;
+
+      const volume = document.createElement('input');
+      volume.type = 'range';
+      volume.min = 0;
+      volume.max = 1;
+      volume.step = 0.01;
+      volume.value = 0.5;
+      volume.className = 'volume';
+
+      const label = document.createElement('div');
+      label.className = 'label';
+      label.innerText = sounds[0].label;
+
+      select.addEventListener('change', () => {
+        audio.src = select.value;
+        label.innerText = select.options[select.selectedIndex].text;
+      });
+
+      playBtn.addEventListener('click', () => {
+        if (audio.paused) {
+          audio.src = select.value;
+          audio.volume = volume.value;
+          audio.play();
+          playBtn.innerText = '⏸️';
+        } else {
+          audio.pause();
+          playBtn.innerText = '▶️';
+        }
+      });
+
+      volume.addEventListener('input', () => {
+        audio.volume = volume.value;
+      });
+
+      channel.appendChild(select);
+      channel.appendChild(playBtn);
+      channel.appendChild(volume);
+      channel.appendChild(label);
+      channel.appendChild(audio);
+      mixer.appendChild(channel);
+    }
+  </script></body>
 </html>
