@@ -8,16 +8,17 @@
 </head>
 <body>
     <div class="container">
-        <h1>Звуки для сна и медитации</h1>
-        <p>Выберите категорию или создайте свой микс</p>
+        <h1>Звуковой микс</h1>
+        <p>Узнайте о новых возможностях аудио.</p>
         <div class="categories">
             <div class="category" data-category="nature">Природа</div>
             <div class="category" data-category="healing">Исцеляющие частоты</div>
             <div class="category" data-category="ambient">Амбиент</div>
+            <div class="category" data-category="asmr">ASMR</div>
         </div>
         <div class="tracks" id="tracks"></div>
-        <div class="mixer">
-            <button id="ai-mix" class="control-btn">AI Микс</button>
+        <div class="controls">
+            <button id="reset" class="control-btn">Сброс</button>
             <input type="range" id="master-volume" min="0" max="1" step="0.01" value="0.5">
             <label for="master-volume">Общая громкость</label>
         </div>
