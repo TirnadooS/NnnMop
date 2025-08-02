@@ -1,54 +1,114 @@
-document.addEventListener('DOMContentLoaded', () => {
-    const soundButtons = document.querySelectorAll('.sound-btn');
-    const playPauseButton = document.getElementById('play-pause');
-    const volumeControl = document.getElementById('volume');
-    let currentAudio = null;
-    let isPlaying = false;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-    const sounds = {
-        rain: 'sounds/rain.mp3',
-        waves: 'sounds/waves.mp3',
-        'white-noise': 'sounds/white-noise.mp3'
-    };
+body {
+    font-family: 'Arial', sans-serif;
+    background: #1a1a2e;
+    color: #e5e5e5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    overflow-y: auto;
+}
 
-    soundButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            const soundKey = button.getAttribute('data-sound');
-            soundButtons.forEach(btn => btn.classList.remove('active'));
-            button.classList.add('active');
+.container {
+    text-align: center;
+    padding: 20px;
+    max-width: 500px;
+    width: 100%;
+}
 
-            if (currentAudio) {
-                currentAudio.pause();
-                currentAudio.currentTime = 0;
-            }
+h1 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
 
-            currentAudio = new Audio(sounds[soundKey]);
-            currentAudio.loop = true;
-            currentAudio.volume = volumeControl.value;
+p {
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+}
 
-            if (isPlaying) {
-                currentAudio.play();
-                playPauseButton.textContent = 'Пауза';
-            }
-        });
-    });
+.categories {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
 
-    playPauseButton.addEventListener('click', () => {
-        if (!currentAudio) return;
+.category {
+    padding: 15px;
+    background: #16213e;
+    border-radius: 8px;
+    cursor: pointer;
+    flex: 1;
+    transition: background 0.3s;
+}
 
-        if (isPlaying) {
-            currentAudio.pause();
-            playPauseButton.textContent = 'Воспроизвести';
-        } else {
-            currentAudio.play();
-            playPauseButton.textContent = 'Пауза';
-        }
-        isPlaying = !isPlaying;
-    });
+.category:hover {
+    background: #0f3460;
+}
 
-    volumeControl.addEventListener('input', () => {
-        if (currentAudio) {
-            currentAudio.volume = volumeControl.value;
-        }
-    });
-});
+.tracks {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.track {
+    display: flex;
+    align-items: center;
+    background: #16213e;
+    padding: 10px;
+    border-radius: 8px;
+    justify-content: space-between;
+}
+
+.track-name {
+    font-size: 1rem;
+}
+
+.wave {
+    width: 100px;
+    height: 20px;
+    background: repeating-linear-gradient(90deg, #4ecca3 0, #4ecca3 10px, transparent 10px, transparent 20px);
+    animation: wave 2s infinite linear;
+}
+
+@keyframes wave {
+    0% { background-position: 0 0; }
+    100% { background-position: -20px 0; }
+}
+
+.volume-slider {
+    width: 100px;
+}
+
+.control-btn {
+    padding: 10px 20px;
+    background: #4ecca3;
+    border: none;
+    border-radius: 8px;
+    color: #1a1a2e;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.control-btn:hover {
+    background: #45b897;
+}
+
+input[type="range"] {
+    width: 200px;
+}
+
+@media (max-width: 600px) {
+    h1 { font-size: 1.5rem; }
+    .category { padding: 10px; }
+    .track { flex-direction: column; gap: 10px; }
+    .wave { width: 80px; }
+    input[type="range"] { width: 150px; }
+}
