@@ -3,22 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Сайт для сна</title>
+    <title>Звуки для сна и медитации</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
-        <h1>Сайт для сна</h1>
-        <p>Выберите звук для расслабления</p>
-        <div class="sound-buttons">
-            <button class="sound-btn" data-sound="rain">Шум дождя</button>
-            <button class="sound-btn" data-sound="waves">Морские волны</button>
-            <button class="sound-btn" data-sound="white-noise">Белый шум</button>
+        <h1>Звуки для сна и медитации</h1>
+        <p>Выберите категорию или создайте свой микс</p>
+        <div class="categories">
+            <div class="category" data-category="nature">Природа</div>
+            <div class="category" data-category="healing">Исцеляющие частоты</div>
+            <div class="category" data-category="ambient">Амбиент</div>
         </div>
-        <div class="controls">
-            <button id="play-pause" class="control-btn">Воспроизвести</button>
-            <input type="range" id="volume" min="0" max="1" step="0.01" value="0.5">
-            <label for="volume">Громкость</label>
+        <div class="tracks" id="tracks"></div>
+        <div class="mixer">
+            <button id="ai-mix" class="control-btn">AI Микс</button>
+            <input type="range" id="master-volume" min="0" max="1" step="0.01" value="0.5">
+            <label for="master-volume">Общая громкость</label>
         </div>
     </div>
     <script src="script.js"></script>
