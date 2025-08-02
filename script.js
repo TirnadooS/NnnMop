@@ -4,20 +4,20 @@ document.addEventListener('DOMContentLoaded', () => {
     const masterVolume = document.getElementById('master-volume');
     let tracks = [];
 
-    // Встроенные аудиофайлы в формате base64 (короткие клипы для примера)
+    // Встроенные base64-аудиофайлы (короткие фрагменты для примера)
     const audioData = {
-        'rain': 'data:audio/mpeg;base64,//uQx...[короткий фрагмент дождя]...',
-        'waves': 'data:audio/mpeg;base64,//uQx...[короткий фрагмент волн]...',
-        'wind': 'data:audio/mpeg;base64,//uQx...[короткий фрагмент ветра]...',
-        'fire': 'data:audio/mpeg;base64,//uQx...[короткий фрагмент костра]...',
-        'crickets': 'data:audio/mpeg;base64,//uQx...[короткий фрагмент сверчков]...',
-        'umbrella-rain': 'data:audio/mpeg;base64,//uQx...[короткий фрагмент дождя под зонтом]...',
-        '432hz': 'data:audio/mpeg;base64,//uQx...[короткий фрагмент 432 Гц]...',
-        '528hz': 'data:audio/mpeg;base64,//uQx...[короткий фрагмент 528 Гц]...',
-        '639hz': 'data:audio/mpeg;base64,//uQx...[короткий фрагмент 639 Гц]...',
-        '741hz': 'data:audio/mpeg;base64,//uQx...[короткий фрагмент 741 Гц]...',
-        '852hz': 'data:audio/mpeg;base64,//uQx...[короткий фрагмент 852 Гц]...',
-        '963hz': 'data:audio/mpeg;base64,//uQx...[короткий фрагмент 963 Гц]...'
+        rain: 'data:audio/mpeg;base64,//uQxA...[дождь]...',
+        waves: 'data:audio/mpeg;base64,//uQxA...[волны]...',
+        wind: 'data:audio/mpeg;base64,//uQxA...[ветер]...',
+        fire: 'data:audio/mpeg;base64,//uQxA...[костер]...',
+        crickets: 'data:audio/mpeg;base64,//uQxA...[сверчки]...',
+        umbrellaRain: 'data:audio/mpeg;base64,//uQxA...[дождь под зонтом]...',
+        '432hz': 'data:audio/mpeg;base64,//uQxA...[432 Гц]...',
+        '528hz': 'data:audio/mpeg;base64,//uQxA...[528 Гц]...',
+        '639hz': 'data:audio/mpeg;base64,//uQxA...[639 Гц]...',
+        '741hz': 'data:audio/mpeg;base64,//uQxA...[741 Гц]...',
+        '852hz': 'data:audio/mpeg;base64,//uQxA...[852 Гц]...',
+        '963hz': 'data:audio/mpeg;base64,//uQxA...[963 Гц]...'
     };
 
     const categories = {
@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
             { name: 'Ветер', src: audioData.wind, volume: 0.5 },
             { name: 'Костер', src: audioData.fire, volume: 0.5 },
             { name: 'Сверчки', src: audioData.crickets, volume: 0.5 },
-            { name: 'Дождь под зонтом', src: audioData['umbrella-rain'], volume: 0.5 }
+            { name: 'Дождь под зонтом', src: audioData.umbrellaRain, volume: 0.5 }
         ],
         healing: [
             { name: '432 Гц', src: audioData['432hz'], volume: 0.5 },
@@ -38,11 +38,11 @@ document.addEventListener('DOMContentLoaded', () => {
             { name: '963 Гц', src: audioData['963hz'], volume: 0.5 }
         ],
         ambient: [
-            { name: 'Белый шум', src: audioData.rain, volume: 0.5 }, // Пример, можно заменить
+            { name: 'Белый шум', src: audioData.rain, volume: 0.5 },
             { name: 'Глубокий ом', src: audioData['432hz'], volume: 0.5 }
         ],
         asmr: [
-            { name: 'Шепот', src: audioData.rain, volume: 0.5 }, // Пример, можно заменить
+            { name: 'Шепот', src: audioData.rain, volume: 0.5 },
             { name: 'Тапки по полу', src: audioData.waves, volume: 0.5 }
         ]
     };
