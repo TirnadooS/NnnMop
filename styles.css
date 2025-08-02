@@ -5,60 +5,64 @@
 }
 
 body {
-    font-family: 'Arial', sans-serif;
-    background: #1a1a2e;
-    color: #d3d3d3;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #1a2a44, #2e4066);
+    color: #e0e7ff;
     min-height: 100vh;
     overflow-y: auto;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 20px 0;
 }
 
 .container {
-    padding: 20px;
-    max-width: 500px;
+    max-width: 600px;
     width: 100%;
     text-align: center;
+    padding: 0 15px;
 }
 
 h1 {
-    font-size: 2rem;
+    font-size: 2.2rem;
     margin-bottom: 10px;
-    color: #fff;
+    font-weight: 600;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 p {
-    font-size: 0.9rem;
+    font-size: 1rem;
     margin-bottom: 20px;
-    color: #a9a9a9;
+    color: #b0c4de;
 }
 
 .categories {
     display: flex;
     gap: 10px;
     margin-bottom: 20px;
+    flex-wrap: wrap;
 }
 
 .category {
     flex: 1;
     padding: 15px;
-    background: #16213e;
-    border-radius: 8px;
+    background: rgba(22, 33, 62, 0.8);
+    border-radius: 12px;
     cursor: pointer;
-    font-size: 1rem;
-    color: #d3d3d3;
-    transition: background 0.3s;
+    font-size: 1.1rem;
+    transition: transform 0.3s, background 0.3s;
+    backdrop-filter: blur(5px);
 }
 
 .category:hover {
-    background: #0f3460;
+    transform: scale(1.05);
+    background: rgba(15, 52, 96, 0.9);
 }
 
 .tracks {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 12px;
     margin-bottom: 20px;
 }
 
@@ -66,31 +70,33 @@ p {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background: #16213e;
-    padding: 10px;
-    border-radius: 8px;
+    background: rgba(22, 33, 62, 0.7);
+    padding: 12px;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .track-name {
     font-size: 1rem;
-    color: #d3d3d3;
+    color: #e0e7ff;
     flex: 1;
+    padding-left: 10px;
 }
 
 .wave {
-    width: 100px;
-    height: 20px;
-    background: repeating-linear-gradient(90deg, #4ecca3 0, #4ecca3 10px, transparent 10px, transparent 20px);
-    animation: wave 2s infinite linear;
+    width: 120px;
+    height: 25px;
+    background: repeating-linear-gradient(90deg, #4caf50 0, #4caf50 12px, transparent 12px, transparent 24px);
+    animation: wave 1.8s infinite linear;
 }
 
 @keyframes wave {
     0% { background-position: 0 0; }
-    100% { background-position: -20px 0; }
+    100% { background-position: -24px 0; }
 }
 
 .volume-slider {
-    width: 100px;
+    width: 120px;
     margin-left: 10px;
 }
 
@@ -98,37 +104,42 @@ p {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
 }
 
 .control-btn {
-    padding: 10px 20px;
-    background: #3498db;
+    padding: 12px 24px;
+    background: linear-gradient(90deg, #4caf50, #45a049);
     border: none;
-    border-radius: 8px;
+    border-radius: 12px;
     color: #fff;
+    font-size: 1rem;
     cursor: pointer;
-    transition: background 0.3s;
+    transition: transform 0.3s, background 0.3s;
 }
 
 .control-btn:hover {
-    background: #2980b9;
+    transform: scale(1.05);
+    background: linear-gradient(90deg, #45a049, #388e3c);
 }
 
 input[type="range"] {
-    width: 200px;
+    width: 250px;
+    accent-color: #4caf50;
 }
 
 label {
-    font-size: 0.9rem;
-    color: #d3d3d3;
+    font-size: 1rem;
+    color: #b0c4de;
 }
 
 @media (max-width: 600px) {
-    h1 { font-size: 1.5rem; }
-    .category { padding: 10px; font-size: 0.9rem; }
+    h1 { font-size: 1.8rem; }
+    .categories { flex-direction: column; }
+    .category { font-size: 1rem; padding: 12px; }
     .track { flex-direction: column; gap: 10px; }
-    .wave { width: 80px; }
-    input[type="range"] { width: 150px; }
-    .control-btn { padding: 8px 16px; }
+    .wave { width: 100px; }
+    .volume-slider { width: 100px; }
+    input[type="range"] { width: 180px; }
+    .control-btn { padding: 10px 20px; font-size: 0.9rem; }
 }
