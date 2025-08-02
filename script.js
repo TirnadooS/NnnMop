@@ -1,114 +1,70 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+document.addEventListener('DOMContentLoaded', () => {
+    const tracksContainer = document.getElementById('tracks');
+    const aiMixButton = document.getElementById('ai-mix');
+    const masterVolume = document.getElementById('master-volume');
+    let tracks = [];
 
-body {
-    font-family: 'Arial', sans-serif;
-    background: #1a1a2e;
-    color: #e5e5e5;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    overflow-y: auto;
-}
+    const categories = {
+        nature: [
+            { name: 'Шум дождя', src: 'sounds/rain-432hz.mp3', volume: 0.5 },
+            { name: 'Морские волны', src: 'sounds/waves-528hz.mp3', volume: 0.5 }
+        ],
+        healing: [
+            { name: '432 Гц', src: 'sounds/432hz.mp3', volume: 0.5 },
+            { name: '528 Гц', src: 'sounds/528hz.mp3', volume: 0.5 }
+        ],
+        ambient: [
+            { name: 'Белый шум', src: 'sounds/white-noise.mp3', volume: 0.5 },
+            { name: 'Глубокий ом', src: 'sounds/om-432hz.mp3', volume: 0.5 }
+        ]
+    };
 
-.container {
-    text-align: center;
-    padding: 20px;
-    max-width: 500px;
-    width: 100%;
-}
+    document.querySelectorAll('.category').forEach(category => {
+        category.addEventListener('click', () => {
+            const cat = category.getAttribute('data-category');
+            loadTracks(categories[cat]);
+        });
+    });
 
-h1 {
-    font-size: 2rem;
-    margin-bottom: 1rem;
-}
+    function loadTracks(categoryTracks) {
+        tracksContainer.innerHTML = '';
+        tracks = categoryTracks.map(track => {
+            const div = document.createElement('div');
+            div.className = 'track';
+            div.innerHTML = `
+                <span class="track-name">${track.name}</span>
+                <div class="wave"></div>
+                <input type="range" class="volume-slider" min="0" max="1" step="0.01" value="${track.volume}">
+            `;
+            tracksContainer.appendChild(div);
 
-p {
-    font-size: 1rem;
-    margin-bottom: 1.5rem;
-}
+            const audio = new Audio(track.src);
+            audio.loop = true;
+            audio.volume = track.volume;
 
-.categories {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 20px;
-}
+            const volumeSlider = div.querySelector('.volume-slider');
+            volumeSlider.addEventListener('input', () => {
+                audio.volume = volumeSlider.value;
+                track.volume = volumeSlider.value;
+            });
 
-.category {
-    padding: 15px;
-    background: #16213e;
-    border-radius: 8px;
-    cursor: pointer;
-    flex: 1;
-    transition: background 0.3s;
-}
+            return { audio, volumeSlider };
+        });
+    }
 
-.category:hover {
-    background: #0f3460;
-}
+    aiMixButton.addEventListener('click', () => {
+        tracks.forEach(t => t.audio.pause());
+        tracksContainer.innerHTML = '';
+        const randomTracks = [];
+        for (let cat in categories) {
+            const track = categories[cat][Math.floor(Math.random() * categories[cat].length)];
+            randomTracks.push({ ...track, volume: 0.3 + Math.random() * 0.5 });
+        }
+        loadTracks(randomTracks);
+        randomTracks.forEach(t => t.audio.play());
+    });
 
-.tracks {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    margin-bottom: 20px;
-}
-
-.track {
-    display: flex;
-    align-items: center;
-    background: #16213e;
-    padding: 10px;
-    border-radius: 8px;
-    justify-content: space-between;
-}
-
-.track-name {
-    font-size: 1rem;
-}
-
-.wave {
-    width: 100px;
-    height: 20px;
-    background: repeating-linear-gradient(90deg, #4ecca3 0, #4ecca3 10px, transparent 10px, transparent 20px);
-    animation: wave 2s infinite linear;
-}
-
-@keyframes wave {
-    0% { background-position: 0 0; }
-    100% { background-position: -20px 0; }
-}
-
-.volume-slider {
-    width: 100px;
-}
-
-.control-btn {
-    padding: 10px 20px;
-    background: #4ecca3;
-    border: none;
-    border-radius: 8px;
-    color: #1a1a2e;
-    cursor: pointer;
-    transition: background 0.3s;
-}
-
-.control-btn:hover {
-    background: #45b897;
-}
-
-input[type="range"] {
-    width: 200px;
-}
-
-@media (max-width: 600px) {
-    h1 { font-size: 1.5rem; }
-    .category { padding: 10px; }
-    .track { flex-direction: column; gap: 10px; }
-    .wave { width: 80px; }
-    input[type="range"] { width: 150px; }
-}
+    masterVolume.addEventListener('input', () => {
+        tracks.forEach(t => t.audio.volume = t.volumeSlider.value * masterVolume.value);
+    });
+});
