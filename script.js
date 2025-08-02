@@ -1,94 +1,96 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const tracksContainer = document.getElementById('tracks');
-    const resetButton = document.getElementById('reset');
-    const masterVolume = document.getElementById('master-volume');
+    const soundGrid = document.getElementById('sound-grid');
+    const mixer = document.getElementById('mixer');
+    const aiAssist = document.getElementById('ai-assist');
+    const slots = document.getElementById('slots');
     let tracks = [];
+    let favorites = JSON.parse(localStorage.getItem('favorites')) || {};
 
-    // Встроенные base64-аудиофайлы (короткие фрагменты для примера)
+    // Встроенные base64-аудиофайлы (короткие фрагменты)
     const audioData = {
-        rain: 'data:audio/mpeg;base64,//uQxA...[дождь]...',
-        waves: 'data:audio/mpeg;base64,//uQxA...[волны]...',
-        wind: 'data:audio/mpeg;base64,//uQxA...[ветер]...',
-        fire: 'data:audio/mpeg;base64,//uQxA...[костер]...',
-        crickets: 'data:audio/mpeg;base64,//uQxA...[сверчки]...',
-        umbrellaRain: 'data:audio/mpeg;base64,//uQxA...[дождь под зонтом]...',
         '432hz': 'data:audio/mpeg;base64,//uQxA...[432 Гц]...',
         '528hz': 'data:audio/mpeg;base64,//uQxA...[528 Гц]...',
         '639hz': 'data:audio/mpeg;base64,//uQxA...[639 Гц]...',
         '741hz': 'data:audio/mpeg;base64,//uQxA...[741 Гц]...',
         '852hz': 'data:audio/mpeg;base64,//uQxA...[852 Гц]...',
-        '963hz': 'data:audio/mpeg;base64,//uQxA...[963 Гц]...'
+        '936hz': 'data:audio/mpeg;base64,//uQxA...[936 Гц]...',
+        rain: 'data:audio/mpeg;base64,//uQxA...[дождь]...',
+        wind: 'data:audio/mpeg;base64,//uQxA...[ветер]...',
+        fire: 'data:audio/mpeg;base64,//uQxA...[огонь]...',
+        forest: 'data:audio/mpeg;base64,//uQxA...[лес]...',
+        waterfall: 'data:audio/mpeg;base64,//uQxA...[водопад]...',
+        river: 'data:audio/mpeg;base64,//uQxA...[река]...',
     };
 
-    const categories = {
-        nature: [
-            { name: 'Шум дождя', src: audioData.rain, volume: 0.5 },
-            { name: 'Морские волны', src: audioData.waves, volume: 0.5 },
-            { name: 'Ветер', src: audioData.wind, volume: 0.5 },
-            { name: 'Костер', src: audioData.fire, volume: 0.5 },
-            { name: 'Сверчки', src: audioData.crickets, volume: 0.5 },
-            { name: 'Дождь под зонтом', src: audioData.umbrellaRain, volume: 0.5 }
-        ],
-        healing: [
-            { name: '432 Гц', src: audioData['432hz'], volume: 0.5 },
-            { name: '528 Гц', src: audioData['528hz'], volume: 0.5 },
-            { name: '639 Гц', src: audioData['639hz'], volume: 0.5 },
-            { name: '741 Гц', src: audioData['741hz'], volume: 0.5 },
-            { name: '852 Гц', src: audioData['852hz'], volume: 0.5 },
-            { name: '963 Гц', src: audioData['963hz'], volume: 0.5 }
-        ],
-        ambient: [
-            { name: 'Белый шум', src: audioData.rain, volume: 0.5 },
-            { name: 'Глубокий ом', src: audioData['432hz'], volume: 0.5 }
-        ],
-        asmr: [
-            { name: 'Шепот', src: audioData.rain, volume: 0.5 },
-            { name: 'Тапки по полу', src: audioData.waves, volume: 0.5 }
-        ]
-    };
+    const sounds = [
+        { name: '432 Гц', src: audioData['432hz'] },
+        { name: '528 Гц', src: audioData['528hz'] },
+        { name: '639 Гц', src: audioData['639hz'] },
+        { name: '741 Гц', src: audioData['741hz'] },
+        { name: '852 Гц', src: audioData['852hz'] },
+        { name: '936 Гц', src: audioData['936hz'] },
+        { name: 'Дождь', src: audioData.rain },
+        { name: 'Ветер', src: audioData.wind },
+        { name: 'Огонь', src: audioData.fire },
+        { name: 'Лес', src: audioData.forest },
+        { name: 'Водопад', src: audioData.waterfall },
+        { name: 'Река', src: audioData.river },
+        { name: '', src: '' }, // Заглушки для 4x4
+        { name: '', src: '' },
+        { name: '', src: '' },
+        { name: '', src: '' }
+    ];
 
-    document.querySelectorAll('.category').forEach(category => {
-        category.addEventListener('click', () => {
-            const cat = category.getAttribute('data-category');
-            loadTracks(categories[cat]);
-        });
+    sounds.forEach(sound => {
+        const btn = document.createElement('button');
+        btn.className = 'sound-btn';
+        btn.textContent = sound.name || 'Пусто';
+        btn.addEventListener('click', () => toggleSound(sound));
+        soundGrid.appendChild(btn);
     });
 
-    function loadTracks(categoryTracks) {
-        tracksContainer.innerHTML = '';
-        tracks.forEach(t => t.audio.pause());
-        tracks = categoryTracks.map(track => {
-            const div = document.createElement('div');
-            div.className = 'track';
-            div.innerHTML = `
-                <span class="track-name">${track.name}</span>
-                <div class="wave"></div>
-                <input type="range" class="volume-slider" min="0" max="1" step="0.01" value="${track.volume}">
-            `;
-            tracksContainer.appendChild(div);
-
-            const audio = new Audio(track.src);
+    function toggleSound(sound) {
+        if (!sound.src) return;
+        const existing = tracks.find(t => t.sound === sound);
+        if (existing) {
+            existing.audio.pause();
+            tracks = tracks.filter(t => t !== existing);
+        } else {
+            const audio = new Audio(sound.src);
             audio.loop = true;
-            audio.volume = track.volume;
-
-            const volumeSlider = div.querySelector('.volume-slider');
-            volumeSlider.addEventListener('input', () => {
-                audio.volume = volumeSlider.value;
-                track.volume = volumeSlider.value;
-            });
-
+            audio.volume = 0.5;
             audio.play();
-            return { audio, volumeSlider };
-        });
+            tracks.push({ sound, audio, volume: 0.5 });
+        }
     }
 
-    resetButton.addEventListener('click', () => {
-        tracks.forEach(t => t.audio.pause());
-        tracksContainer.innerHTML = '';
-        tracks = [];
+    document.getElementById('master-volume').addEventListener('input', (e) => {
+        tracks.forEach(t => t.audio.volume = t.volume * e.target.value);
     });
 
-    masterVolume.addEventListener('input', () => {
-        tracks.forEach(t => t.audio.volume = t.volumeSlider.value * masterVolume.value);
+    aiAssist.addEventListener('click', () => {
+        tracks.forEach(t => t.audio.pause());
+        tracks = [];
+        const randomSounds = sounds.filter(s => s.src).sort(() => Math.random() - 0.5).slice(0, 3);
+        randomSounds.forEach(s => toggleSound(s));
+    });
+
+    slots.querySelectorAll('.slot').forEach(slot => {
+        const input = slot.querySelector('input');
+        const saveBtn = slot.querySelector('.save-btn');
+        const slotId = slot.getAttribute('data-slot');
+
+        if (favorites[slotId]) {
+            input.value = favorites[slotId].name;
+        }
+
+        saveBtn.addEventListener('click', () => {
+            const name = input.value.trim();
+            if (name && tracks.length) {
+                favorites[slotId] = { name, mix: tracks.map(t => t.sound.name) };
+                localStorage.setItem('favorites', JSON.stringify(favorites));
+                alert(`Микс "${name}" сохранен в слот ${slotId}!`);
+            }
+        });
     });
 });
