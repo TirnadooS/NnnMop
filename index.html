@@ -3,25 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#1a2a44">
-    <title>Звуки для сна и медитации</title>
+    <title>Relax</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
-        <h1>Звуковой микс</h1>
-        <p>Погрузитесь в мир гармонии и покоя</p>
-        <div class="categories">
-            <div class="category" data-category="nature">Природа</div>
-            <div class="category" data-category="healing">Частоты</div>
-            <div class="category" data-category="ambient">Амбиент</div>
-            <div class="category" data-category="asmr">ASMR</div>
-        </div>
-        <div class="tracks" id="tracks"></div>
-        <div class="controls">
-            <button id="reset" class="control-btn">Сброс</button>
+        <h1>Relax</h1>
+        <div class="sound-grid" id="sound-grid"></div>
+        <div class="mixer" id="mixer">
             <input type="range" id="master-volume" min="0" max="1" step="0.01" value="0.5">
             <label for="master-volume">Громкость</label>
+        </div>
+        <button id="ai-assist" class="floating-btn">AI Микс</button>
+        <div class="favorites" id="favorites">
+            <h2>Избранные миксы</h2>
+            <div class="slots" id="slots">
+                <div class="slot" data-slot="1"><input type="text" placeholder="Назови микс"><button class="save-btn">Сохранить</button></div>
+                <div class="slot" data-slot="2"><input type="text" placeholder="Назови микс"><button class="save-btn">Сохранить</button></div>
+                <div class="slot" data-slot="3"><input type="text" placeholder="Назови микс"><button class="save-btn">Сохранить</button></div>
+                <div class="slot" data-slot="4"><input type="text" placeholder="Назови микс"><button class="save-btn">Сохранить</button></div>
+            </div>
         </div>
     </div>
     <script src="script.js" async></script>
