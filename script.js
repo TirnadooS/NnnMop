@@ -2,11 +2,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const soundGrid = document.getElementById('sound-grid');
     const mixer = document.getElementById('mixer');
     const aiAssist = document.getElementById('ai-assist');
+    const aiWindow = document.getElementById('ai-window');
+    const createMixBtn = document.getElementById('create-mix');
+    const applyMixBtn = document.getElementById('apply-mix');
+    const closeAiBtn = document.getElementById('close-ai');
+    const preview = document.getElementById('preview');
     const slots = document.getElementById('slots');
     let tracks = [];
+    let aiMix = [];
     let favorites = JSON.parse(localStorage.getItem('favorites')) || {};
 
-    // Встроенные base64-аудиофайлы (короткие фрагменты)
     const audioData = {
         '432hz': 'data:audio/mpeg;base64,//uQxA...[432 Гц]...',
         '528hz': 'data:audio/mpeg;base64,//uQxA...[528 Гц]...',
@@ -35,7 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
         { name: 'Лес', src: audioData.forest },
         { name: 'Водопад', src: audioData.waterfall },
         { name: 'Река', src: audioData.river },
-        { name: '', src: '' }, // Заглушки для 4x4
+        { name: '', src: '' },
         { name: '', src: '' },
         { name: '', src: '' },
         { name: '', src: '' }
@@ -69,10 +74,33 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     aiAssist.addEventListener('click', () => {
+        aiWindow.classList.add('active');
+    });
+
+    createMixBtn.addEventListener('click', () => {
+        aiMix = sounds.filter(s => s.src).sort(() => Math.random() - 0.5).slice(0, 3);
+        preview.textContent = `Предпросмотр: ${aiMix.map(s => s.name).join(', ')}`;
+        aiMix.forEach(s => {
+            const audio = new Audio(s.src);
+            audio.loop = true;
+            audio.volume = 0.3;
+            audio.play();
+            aiMix.push({ sound: s, audio, volume: 0.3 });
+        });
+    });
+
+    applyMixBtn.addEventListener('click', () => {
         tracks.forEach(t => t.audio.pause());
-        tracks = [];
-        const randomSounds = sounds.filter(s => s.src).sort(() => Math.random() - 0.5).slice(0, 3);
-        randomSounds.forEach(s => toggleSound(s));
+        tracks = aiMix.filter(t => t.audio).map(t => ({ sound: t.sound, audio: t.audio, volume: t.volume }));
+        aiWindow.classList.remove('active');
+        aiMix.forEach(t => t.audio && t.audio.pause());
+        aiMix = [];
+    });
+
+    closeAiBtn.addEventListener('click', () => {
+        aiWindow.classList.remove('active');
+        aiMix.forEach(t => t.audio && t.audio.pause());
+        aiMix = [];
     });
 
     slots.querySelectorAll('.slot').forEach(slot => {
