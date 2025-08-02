@@ -10,11 +10,10 @@
     <div class="container">
         <h1>Relax</h1>
         <div class="sound-grid" id="sound-grid"></div>
-        <div class="mixer" id="mixer">
+        <div class="mixer">
             <input type="range" id="master-volume" min="0" max="1" step="0.01" value="0.5">
             <label for="master-volume">Громкость</label>
         </div>
-        <button id="ai-assist" class="floating-btn">AI Микс</button>
         <div class="favorites" id="favorites">
             <h2>Избранные миксы</h2>
             <div class="slots" id="slots">
@@ -24,6 +23,14 @@
                 <div class="slot" data-slot="4"><input type="text" placeholder="Назови микс"><button class="save-btn">Сохранить</button></div>
             </div>
         </div>
+    </div>
+    <button id="ai-assist" class="floating-btn">AI Микс</button>
+    <div id="ai-window" class="ai-window">
+        <h3>AI Ассистент</h3>
+        <button id="create-mix">Создать микс</button>
+        <div id="preview"></div>
+        <button id="apply-mix">Применить</button>
+        <button id="close-ai">Закрыть</button>
     </div>
     <script src="script.js" async></script>
 </body>
