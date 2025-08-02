@@ -7,7 +7,7 @@
 body {
     font-family: 'Arial', sans-serif;
     background: #1a1a2e;
-    color: #e5e5e5;
+    color: #d3d3d3;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -16,20 +16,22 @@ body {
 }
 
 .container {
-    text-align: center;
     padding: 20px;
     max-width: 500px;
     width: 100%;
+    text-align: center;
 }
 
 h1 {
     font-size: 2rem;
-    margin-bottom: 1rem;
+    margin-bottom: 10px;
+    color: #fff;
 }
 
 p {
-    font-size: 1rem;
-    margin-bottom: 1.5rem;
+    font-size: 0.9rem;
+    margin-bottom: 20px;
+    color: #a9a9a9;
 }
 
 .categories {
@@ -39,11 +41,13 @@ p {
 }
 
 .category {
+    flex: 1;
     padding: 15px;
     background: #16213e;
     border-radius: 8px;
     cursor: pointer;
-    flex: 1;
+    font-size: 1rem;
+    color: #d3d3d3;
     transition: background 0.3s;
 }
 
@@ -61,14 +65,16 @@ p {
 .track {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     background: #16213e;
     padding: 10px;
     border-radius: 8px;
-    justify-content: space-between;
 }
 
 .track-name {
     font-size: 1rem;
+    color: #d3d3d3;
+    flex: 1;
 }
 
 .wave {
@@ -85,30 +91,44 @@ p {
 
 .volume-slider {
     width: 100px;
+    margin-left: 10px;
+}
+
+.controls {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
 }
 
 .control-btn {
     padding: 10px 20px;
-    background: #4ecca3;
+    background: #3498db;
     border: none;
     border-radius: 8px;
-    color: #1a1a2e;
+    color: #fff;
     cursor: pointer;
     transition: background 0.3s;
 }
 
 .control-btn:hover {
-    background: #45b897;
+    background: #2980b9;
 }
 
 input[type="range"] {
     width: 200px;
 }
 
+label {
+    font-size: 0.9rem;
+    color: #d3d3d3;
+}
+
 @media (max-width: 600px) {
     h1 { font-size: 1.5rem; }
-    .category { padding: 10px; }
+    .category { padding: 10px; font-size: 0.9rem; }
     .track { flex-direction: column; gap: 10px; }
     .wave { width: 80px; }
     input[type="range"] { width: 150px; }
+    .control-btn { padding: 8px 16px; }
 }
