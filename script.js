@@ -1,21 +1,49 @@
 document.addEventListener('DOMContentLoaded', () => {
     const tracksContainer = document.getElementById('tracks');
-    const aiMixButton = document.getElementById('ai-mix');
+    const resetButton = document.getElementById('reset');
     const masterVolume = document.getElementById('master-volume');
     let tracks = [];
 
+    // Встроенные аудиофайлы в формате base64 (короткие клипы для примера)
+    const audioData = {
+        'rain': 'data:audio/mpeg;base64,//uQx...[короткий фрагмент дождя]...',
+        'waves': 'data:audio/mpeg;base64,//uQx...[короткий фрагмент волн]...',
+        'wind': 'data:audio/mpeg;base64,//uQx...[короткий фрагмент ветра]...',
+        'fire': 'data:audio/mpeg;base64,//uQx...[короткий фрагмент костра]...',
+        'crickets': 'data:audio/mpeg;base64,//uQx...[короткий фрагмент сверчков]...',
+        'umbrella-rain': 'data:audio/mpeg;base64,//uQx...[короткий фрагмент дождя под зонтом]...',
+        '432hz': 'data:audio/mpeg;base64,//uQx...[короткий фрагмент 432 Гц]...',
+        '528hz': 'data:audio/mpeg;base64,//uQx...[короткий фрагмент 528 Гц]...',
+        '639hz': 'data:audio/mpeg;base64,//uQx...[короткий фрагмент 639 Гц]...',
+        '741hz': 'data:audio/mpeg;base64,//uQx...[короткий фрагмент 741 Гц]...',
+        '852hz': 'data:audio/mpeg;base64,//uQx...[короткий фрагмент 852 Гц]...',
+        '963hz': 'data:audio/mpeg;base64,//uQx...[короткий фрагмент 963 Гц]...'
+    };
+
     const categories = {
         nature: [
-            { name: 'Шум дождя', src: 'sounds/rain-432hz.mp3', volume: 0.5 },
-            { name: 'Морские волны', src: 'sounds/waves-528hz.mp3', volume: 0.5 }
+            { name: 'Шум дождя', src: audioData.rain, volume: 0.5 },
+            { name: 'Морские волны', src: audioData.waves, volume: 0.5 },
+            { name: 'Ветер', src: audioData.wind, volume: 0.5 },
+            { name: 'Костер', src: audioData.fire, volume: 0.5 },
+            { name: 'Сверчки', src: audioData.crickets, volume: 0.5 },
+            { name: 'Дождь под зонтом', src: audioData['umbrella-rain'], volume: 0.5 }
         ],
         healing: [
-            { name: '432 Гц', src: 'sounds/432hz.mp3', volume: 0.5 },
-            { name: '528 Гц', src: 'sounds/528hz.mp3', volume: 0.5 }
+            { name: '432 Гц', src: audioData['432hz'], volume: 0.5 },
+            { name: '528 Гц', src: audioData['528hz'], volume: 0.5 },
+            { name: '639 Гц', src: audioData['639hz'], volume: 0.5 },
+            { name: '741 Гц', src: audioData['741hz'], volume: 0.5 },
+            { name: '852 Гц', src: audioData['852hz'], volume: 0.5 },
+            { name: '963 Гц', src: audioData['963hz'], volume: 0.5 }
         ],
         ambient: [
-            { name: 'Белый шум', src: 'sounds/white-noise.mp3', volume: 0.5 },
-            { name: 'Глубокий ом', src: 'sounds/om-432hz.mp3', volume: 0.5 }
+            { name: 'Белый шум', src: audioData.rain, volume: 0.5 }, // Пример, можно заменить
+            { name: 'Глубокий ом', src: audioData['432hz'], volume: 0.5 }
+        ],
+        asmr: [
+            { name: 'Шепот', src: audioData.rain, volume: 0.5 }, // Пример, можно заменить
+            { name: 'Тапки по полу', src: audioData.waves, volume: 0.5 }
         ]
     };
 
@@ -28,6 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function loadTracks(categoryTracks) {
         tracksContainer.innerHTML = '';
+        tracks.forEach(t => t.audio.pause());
         tracks = categoryTracks.map(track => {
             const div = document.createElement('div');
             div.className = 'track';
@@ -48,20 +77,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 track.volume = volumeSlider.value;
             });
 
+            audio.play();
             return { audio, volumeSlider };
         });
     }
 
-    aiMixButton.addEventListener('click', () => {
+    resetButton.addEventListener('click', () => {
         tracks.forEach(t => t.audio.pause());
         tracksContainer.innerHTML = '';
-        const randomTracks = [];
-        for (let cat in categories) {
-            const track = categories[cat][Math.floor(Math.random() * categories[cat].length)];
-            randomTracks.push({ ...track, volume: 0.3 + Math.random() * 0.5 });
-        }
-        loadTracks(randomTracks);
-        randomTracks.forEach(t => t.audio.play());
+        tracks = [];
     });
 
     masterVolume.addEventListener('input', () => {
