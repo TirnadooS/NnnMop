@@ -1,11 +1,6 @@
-export function speakNo(text){
-  if(!('speechSynthesis' in window)){
-    alert('Озвучка не поддерживается в этом браузере');
-    return;
-  }
-  const u = new SpeechSynthesisUtterance(text);
-  u.lang = 'no-NO';
-  u.rate = 0.95;
-  speechSynthesis.cancel();
-  speechSynthesis.speak(u);
+export function speak(text) {
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = 'nb-NO'; // Норвежский Bokmål
+    utterance.rate = 0.9; // Скорость
+    window.speechSynthesis.speak(utterance);
 }
