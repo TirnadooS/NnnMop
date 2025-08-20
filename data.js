@@ -1,18 +1,117 @@
-// Базовый набор (минимум, чтобы всё работало офлайн). Можно расширять JSON‑файлами ниже.
-export const BASE_DATA = [
-  {n:'Hei', r:'хэй', t:'Привет', lvl:'A1', topic:'Приветствия'},
-  {n:'God morgen', r:'гу морген', t:'Доброе утро', lvl:'A1', topic:'Приветствия'},
-  {n:'Takk', r:'так', t:'Спасибо', lvl:'A1', topic:'Приветствия'},
-  {n:'Vann', r:'ванн', t:'Вода', lvl:'A1', topic:'Еда и напитки'},
-  {n:'Brød', r:'брё', t:'Хлеб', lvl:'A1', topic:'Еда и напитки'},
-  {n:'å være', r:'о вэрэ', t:'быть', lvl:'A1', topic:'Глаголы'},
-  {n:'å ha', r:'о ха', t:'иметь', lvl:'A1', topic:'Глаголы'},
-  {n:'arbeid', r:'арбейд', t:'работа', lvl:'B1', topic:'Работа'}
-];
+export const words = [
+    // Приветствия (A1)
+    { norsk: "Hei!", transcription: "Хэй!", translation: "Привет!", level: "A1", theme: "приветствия" },
+    { norsk: "God morgen!", transcription: "Гуд морген!", translation: "Доброе утро!", level: "A1", theme: "приветствия" },
+    { norsk: "God dag!", transcription: "Гуд даг!", translation: "Добрый день!", level: "A1", theme: "приветствия" },
+    { norsk: "God aften!", transcription: "Гуд афтен!", translation: "Добрый вечер!", level: "A1", theme: "приветствия" },
+    { norsk: "God kveld!", transcription: "Гуд квелд!", translation: "Спокойной ночи!", level: "A1", theme: "приветствия" },
+    { norsk: "Ha det!", transcription: "Ха дет!", translation: "Пока!", level: "A1", theme: "приветствия" },
+    { norsk: "På gjensyn!", transcription: "По йенсюн!", translation: "До свидания!", level: "A1", theme: "приветствия" },
+    { norsk: "Takk!", transcription: "Такк!", translation: "Спасибо!", level: "A1", theme: "приветствия" },
+    { norsk: "Vær så snill!", transcription: "Вер со снилл!", translation: "Пожалуйста!", level: "A1", theme: "приветствия" },
+    { norsk: "Unnskyld!", transcription: "Уншюлд!", translation: "Извините!", level: "A1", theme: "приветствия" },
+    { norsk: "Beklager!", transcription: "Беклагер!", translation: "Мне жаль!", level: "A1", theme: "приветствия" },
+    { norsk: "Velkommen!", transcription: "Велькоммен!", translation: "Добро пожаловать!", level: "A1", theme: "приветствия" },
+    { norsk: "Hyggelig å møte deg!", transcription: "Хюггелиг о мёте дей!", translation: "Приятно познакомиться!", level: "A1", theme: "приветствия" },
+    { norsk: "Hvordan har du det?", transcription: "Вордан хар ду дет?", translation: "Как дела?", level: "A1", theme: "приветствия" },
+    { norsk: "Det går bra, takk!", transcription: "Дет гор бра, такк!", translation: "Хорошо, спасибо!", level: "A1", theme: "приветствия" },
 
-// Динамическая загрузка пакетов уровней (работает на GitHub Pages)
-export async function loadPacks(){
-  const packs = ['data/a1.json','data/a2.json','data/b1.json','data/b2.json'];
-  const loaded = await Promise.all(packs.map(p=> fetch(p).then(r=> r.ok? r.json(): []).catch(()=>[])));
-  return loaded.flat();
-}
+    // Еда (A1-A2)
+    { norsk: "mat", transcription: "Мат", translation: "Еда", level: "A1", theme: "еда" },
+    { norsk: "vann", transcription: "Ванн", translation: "Вода", level: "A1", theme: "еда" },
+    { norsk: "melk", transcription: "Мелк", translation: "Молоко", level: "A1", theme: "еда" },
+    { norsk: "brød", transcription: "Брё", translation: "Хлеб", level: "A1", theme: "еда" },
+    { norsk: "ost", transcription: "Ост", translation: "Сыр", level: "A1", theme: "еда" },
+    { norsk: "kjøtt", transcription: "Кьётт", translation: "Мясо", level: "A1", theme: "еда" },
+    { norsk: "fisk", transcription: "Фиск", translation: "Рыба", level: "A1", theme: "еда" },
+    { norsk: "grønnsaker", transcription: "Грённсакер", translation: "Овощи", level: "A2", theme: "еда" },
+    { norsk: "frukt", transcription: "Фрукт", translation: "Фрукты", level: "A2", theme: "еда" },
+    { norsk: "sukker", transcription: "Суккер", translation: "Сахар", level: "A2", theme: "еда" },
+    { norsk: "salt", transcription: "Салт", translation: "Соль", level: "A2", theme: "еда" },
+    { norsk: "kaffe", transcription: "Каффе", translation: "Кофе", level: "A2", theme: "еда" },
+    { norsk: "te", transcription: "Те", translation: "Чай", level: "A2", theme: "еда" },
+    { norsk: "juice", transcription: "Юйс", translation: "Сок", level: "A2", theme: "еда" },
+    { norsk: "øl", transcription: "Ёл", translation: "Пиво", level: "A2", theme: "еда" },
+
+    // Путешествия (A1-A2)
+    { norsk: "billett", transcription: "Биллетт", translation: "Билет", level: "A1", theme: "путешествия" },
+    { norsk: "hotell", transcription: "Хотелл", translation: "Гостиница", level: "A1", theme: "путешествия" },
+    { norsk: "tog", transcription: "Тог", translation: "Поезд", level: "A1", theme: "путешествия" },
+    { norsk: "buss", transcription: "Бусс", translation: "Автобус", level: "A1", theme: "путешествия" },
+    { norsk: "fly", transcription: "Флы", translation: "Самолет", level: "A1", theme: "путешествия" },
+    { norsk: "reise", transcription: "Рэйсе", translation: "Путешествие", level: "A2", theme: "путешествия" },
+    { norsk: "stasjon", transcription: "Стасьон", translation: "Станция", level: "A2", theme: "путешествия" },
+    { norsk: "flyplass", transcription: "Флыпласс", translation: "Аэропорт", level: "A2", theme: "путешествия" },
+    { norsk: "bagasje", transcription: "Багасйе", translation: "Багаж", level: "A2", theme: "путешествия" },
+    { norsk: "kart", transcription: "Карт", translation: "Карта", level: "A2", theme: "путешествия" },
+    { norsk: "vei", transcription: "Вэй", translation: "Дорога", level: "A2", theme: "путешествия" },
+    { norsk: "tur", transcription: "Тур", translation: "Поездка", level: "A2", theme: "путешествия" },
+    { norsk: "pass", transcription: "Пасс", translation: "Паспорт", level: "A2", theme: "путешествия" },
+    { norsk: "bil", transcription: "Биль", translation: "Машина", level: "A2", theme: "путешествия" },
+    { norsk: "hjelp", transcription: "Йелп", translation: "Помощь", level: "A2", theme: "путешествия" },
+
+    // Ежедневные фразы (A1-B2)
+    { norsk: "ja", transcription: "Я", translation: "Да", level: "A1", theme: "ежедневные фразы" },
+    { norsk: "nei", transcription: "Нэй", translation: "Нет", level: "A1", theme: "ежедневные фразы" },
+    { norsk: "kanskje", transcription: "Канше", translation: "Возможно", level: "A1", theme: "ежедневные фразы" },
+    { norsk: "OK", transcription: "ОК", translation: "Хорошо", level: "A1", theme: "ежедневные фразы" },
+    { norsk: "Jeg heter...", transcription: "Йег хетер...", translation: "Меня зовут...", level: "A1", theme: "ежедневные фразы" },
+    { norsk: "Jeg kommer fra...", transcription: "Йег коммер фра...", translation: "Я из...", level: "A1", theme: "ежедневные фразы" },
+    { norsk: "Hvor er...", transcription: "Хвор эр...", translation: "Где...", level: "A1", theme: "ежедневные фразы" },
+    { norsk: "Hvor mye koster...", transcription: "Хвор мюе костер...", translation: "Сколько стоит...", level: "A2", theme: "ежедневные фразы" },
+    { norsk: "Jeg vil gjerne...", transcription: "Йег вил йерне...", translation: "Я хотел бы...", level: "A2", theme: "ежедневные фразы" },
+    { norsk: "Kan du hjelpe meg?", transcription: "Кан ду йелпе мег?", translation: "Можешь помочь мне?", level: "A2", theme: "ежедневные фразы" },
+    { norsk: "Jeg forstår ikke.", transcription: "Йег форстор икке.", translation: "Я не понимаю.", level: "A2", theme: "ежедневные фразы" },
+    { norsk: "Jeg trenger...", transcription: "Йег трэнгер...", translation: "Мне нужно...", level: "B1", theme: "ежедневные фразы" },
+    { norsk: "Hva mener du?", transcription: "Ва менер ду?", translation: "Что ты имеешь в виду?", level: "B1", theme: "ежедневные фразы" },
+    { norsk: "Jeg er enig.", transcription: "Йег эр ениг.", translation: "Я согласен.", level: "B1", theme: "ежедневные фразы" },
+    { norsk: "Det er viktig.", transcription: "Дет эр вигиг.", translation: "Это важно.", level: "B2", theme: "ежедневные фразы" },
+
+    // Семья (A1-B2)
+    { norsk: "familie", transcription: "Фамилие", translation: "Семья", level: "A1", theme: "семья" },
+    { norsk: "mor", transcription: "Мор", translation: "Мама", level: "A1", theme: "семья" },
+    { norsk: "far", transcription: "Фар", translation: "Папа", level: "A1", theme: "семья" },
+    { norsk: "søster", transcription: "Сёстер", translation: "Сестра", level: "A1", theme: "семья" },
+    { norsk: "bror", transcription: "Брор", translation: "Брат", level: "A1", theme: "семья" },
+    { norsk: "barn", transcription: "Барн", translation: "Дети", level: "A1", theme: "семья" },
+    { norsk: "ektefelle", transcription: "Эктефелле", translation: "Супруг/супруга", level: "A2", theme: "семья" },
+    { norsk: "onkel", transcription: "Онкель", translation: "Дядя", level: "A2", theme: "семья" },
+    { norsk: "tante", transcription: "Танте", translation: "Тетя", level: "A2", theme: "семья" },
+    { norsk: "kusine", transcription: "Кусине", translation: "Кузен/кузина", level: "A2", theme: "семья" },
+    { norsk: "bestemor", transcription: "Бестемор", translation: "Бабушка", level: "A2", theme: "семья" },
+    { norsk: "bestefar", transcription: "Бестефар", translation: "Дедушка", level: "A2", theme: "семья" },
+    { norsk: "foreldre", transcription: "Форэльдре", translation: "Родители", level: "B1", theme: "семья" },
+    { norsk: "slekt", transcription: "Слект", translation: "Родственники", level: "B1", theme: "семья" },
+    { norsk: "adopsjon", transcription: "Адопсьон", translation: "Усыновление", level: "B2", theme: "семья" },
+
+    // Числа (A1-A2)
+    { norsk: "en", transcription: "Эн", translation: "Один", level: "A1", theme: "числа" },
+    { norsk: "to", transcription: "То", translation: "Два", level: "A1", theme: "числа" },
+    { norsk: "tre", transcription: "Тре", translation: "Три", level: "A1", theme: "числа" },
+    { norsk: "fire", transcription: "Фире", translation: "Четыре", level: "A1", theme: "числа" },
+    { norsk: "fem", transcription: "Фем", translation: "Пять", level: "A1", theme: "числа" },
+    { norsk: "seks", transcription: "Секс", translation: "Шесть", level: "A1", theme: "числа" },
+    { norsk: "syv", transcription: "Сюв", translation: "Семь", level: "A1", theme: "числа" },
+    { norsk: "åtte", transcription: "Отте", translation: "Восемь", level: "A1", theme: "числа" },
+    { norsk: "ni", transcription: "Ни", translation: "Девять", level: "A1", theme: "числа" },
+    { norsk: "ti", transcription: "Ти", translation: "Десять", level: "A1", theme: "числа" },
+    { norsk: "elleve", transcription: "Еллеве", translation: "Одиннадцать", level: "A2", theme: "числа" },
+    { norsk: "tolv", transcription: "Тольв", translation: "Двенадцать", level: "A2", theme: "числа" },
+    { norsk: "tjue", transcription: "Тюе", translation: "Двадцать", level: "A2", theme: "числа" },
+    { norsk: "tretti", transcription: "Третти", translation: "Тридцать", level: "A2", theme: "числа" },
+    { norsk: "hundre", transcription: "Хундре", translation: "Сто", level: "A2", theme: "числа" },
+
+    // Продолжение до 1000 слов (пример)
+    { norsk: "himmel", transcription: "Химмел", translation: "Небо", level: "A1", theme: "природа" },
+    { norsk: "sol", transcription: "Сол", translation: "Солнце", level: "A1", theme: "природа" },
+    { norsk: "regn", transcription: "Регн", translation: "Дождь", level: "A1", theme: "природа" },
+    { norsk: "snø", transcription: "Снё", translation: "Снег", level: "A1", theme: "природа" },
+    { norsk: "hus", transcription: "Хус", translation: "Дом", level: "A1", theme: "ежедневные фразы" },
+    { norsk: "gård", transcription: "Гор", translation: "Ферма", level: "A2", theme: "ежедневные фразы" },
+    { norsk: "skole", transcription: "Сколе", translation: "Школа", level: "A2", theme: "ежедневные фразы" },
+    { norsk: "arbeid", transcription: "Арбейд", translation: "Работа", level: "B1", theme: "ежедневные фразы" },
+    { norsk: "tid", transcription: "Тид", translation: "Время", level: "B1", theme: "ежедневные фразы" },
+    { norsk: "kunnskap", transcription: "Куннскап", translation: "Знание", level: "B2", theme: "ежедневные фразы" },
+    // Добавьте еще ~900 слов по аналогии из https://travelwithlanguages.com/blog/most-common-norwegian-words.html или других источников.
+    // Для 12000+ слов используйте внешний JSON или разделите на файлы (data_a1.js, data_b1.js).
+];
