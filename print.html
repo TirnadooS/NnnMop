@@ -1,32 +1,37 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>NorSkolen — Печать слов</title>
-  <link rel="stylesheet" href="print.css" />
+    <meta charset="UTF-8">
+    <title>NorSkolen — Печать</title>
+    <link rel="stylesheet" href="print.css">
 </head>
 <body>
-  <h1>Словарь для печати</h1>
-  <table id="printTable">
-    <thead>
-      <tr><th>Norsk</th><th>Русская транскрипция</th><th>Перевод</th><th>Уровень</th><th>Тема</th></tr>
-    </thead>
-    <tbody></tbody>
-  </table>
-  <script>
-    (async function(){
-      const base = await import('./data.js');
-      let data = base.BASE_DATA;
-      try { const packs = await base.loadPacks(); data = data.concat(packs); } catch(e){}
-      const tbody = document.querySelector('tbody');
-      data.forEach(w=>{
-        const tr=document.createElement('tr');
-        tr.innerHTML=`<td>${w.n}</td><td>${w.r||''}</td><td>${w.t}</td><td>${w.lvl}</td><td>${w.topic}</td>`;
-        tbody.appendChild(tr);
-      });
-      setTimeout(()=> window.print(), 400);
-    })();
-  </script>
+    <table>
+        <thead>
+            <tr>
+                <th>Norsk</th>
+                <th>Транскрипция</th>
+                <th>Перевод</th>
+                <th>Уровень</th>
+                <th>Тема</th>
+            </tr>
+        </thead>
+        <tbody id="printBody"></tbody>
+    </table>
+    <script>
+        const words = JSON.parse(localStorage.getItem('words') || '[]');
+        const printBody = document.getElementById('printBody');
+        words.forEach(word => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${word.norsk}</td>
+                <td>${word.transcription}</td>
+                <td>${word.translation}</td>
+                <td>${word.level}</td>
+                <td>${word.theme}</td>
+            `;
+            printBody.appendChild(row);
+        });
+    </script>
 </body>
 </html>
