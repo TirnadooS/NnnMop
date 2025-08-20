@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>NorSkolen — Грамматика</title>
+  <link rel="stylesheet" href="../styles.css" />
+</head>
+<body>
+  <header class="app-header">
+    <div class="brand"><img src="../assets/logo.svg" alt=""><span>NorSkolen</span></div>
+    <nav class="nav">
+      <a href="../index.html">Словарь</a>
+      <a class="active" href="#">Грамматика</a>
+      <a href="verbs.html">Глаголы</a>
+      <a href="../print.html">Печать</a>
+    </nav>
+    <div class="actions"></div>
+  </header>
+  <main class="grid" style="grid-template-columns:1fr;">
+    <section class="content" style="padding:12px 0;">
+      <div class="card">
+        <h2>Алфавит и звуки</h2>
+        <p>Норвежский алфавит: A–Z + Æ, Ø, Å. Примеры чтения: <strong>æ</strong> ≈ «э», <strong>ø</strong> ≈ «ё/ö», <strong>å</strong> ≈ «о». Сочетания: <strong>kj</strong> ≈ мягкое «хь», <strong>sj/skj</strong> ≈ «ш», <strong>ng</strong> ≈ «нг».</p>
+      </div>
+      <div class="card">
+        <h2>Артикли и определённость</h2>
+        <ul>
+          <li>Неопр. артикль: <em>en</em> (m.), <em>ei</em> (f.), <em>et</em> (n.). Пр.: <em>en bil</em> (машина), <em>ei bok</em> (книга), <em>et hus</em> (дом).</li>
+          <li>Определённая форма суффиксом: <em>bilen</em> (эта машина), <em>boka/boken</em> (эта книга), <em>huset</em> (этот дом).</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h2>Множественное число</h2>
+        <p>Часто: <em>-er</em> или <em>-r</em>: <em>stol → stoler</em>. Средний род часто без суффикса: <em>hus → hus</em>. Опред. мн.ч.: <em>stolene, husene</em>.</p>
+      </div>
+      <div class="card">
+        <h2>Прилагательные и согласование</h2>
+        <p>Обычно: <em>en stor bil</em>, <em>ei stor bok</em> / <em>en stor bok</em>, <em>et stort hus</em>, мн.ч.: <em>store</em>. Опред. форма: <em>den/det/de store</em>.</p>
+      </div>
+      <div class="card">
+        <h2>Порядок слов (V2)</h2>
+        <p>Финитный глагол — на 2‑й позиции: <em>I dag <strong>kommer</strong> han.</em> В вопросе: <em>Kommer han i dag?</em></p>
+      </div>
+      <div class="card">
+        <h2>Времена</h2>
+        <ul>
+          <li>Presens: основа + <em>-r</em>: <em>jeg bor</em> (я живу).</li>
+          <li>Preteritum: слабые <em>-et/-te</em>; сильные — изменение корня (<em>å gå → gikk</em>).</li>
+          <li>Perfektum: <em>har + partisipp</em>: <em>jeg har spist</em>.</li>
+          <li>Futurum: <em>skal/ville/kommer til å + infinitiv</em>.</li>
+        </ul>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
