@@ -1,37 +1,96 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Relax</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>NorSkolen — Норвежский язык A1–B2</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <meta name="theme-color" content="#0b1220" />
 </head>
 <body>
-    <div class="container">
-        <h1>Relax</h1>
-        <div class="sound-grid" id="sound-grid"></div>
-        <div class="mixer">
-            <input type="range" id="master-volume" min="0" max="1" step="0.01" value="0.5">
-            <label for="master-volume">Громкость</label>
-        </div>
-        <div class="favorites" id="favorites">
-            <h2>Избранные миксы</h2>
-            <div class="slots" id="slots">
-                <div class="slot" data-slot="1"><input type="text" placeholder="Назови микс"><button class="save-btn">Сохранить</button></div>
-                <div class="slot" data-slot="2"><input type="text" placeholder="Назови микс"><button class="save-btn">Сохранить</button></div>
-                <div class="slot" data-slot="3"><input type="text" placeholder="Назови микс"><button class="save-btn">Сохранить</button></div>
-                <div class="slot" data-slot="4"><input type="text" placeholder="Назови микс"><button class="save-btn">Сохранить</button></div>
-            </div>
-        </div>
+  <header class="app-header">
+    <div class="brand">
+      <img src="assets/logo.svg" alt=""> <span>NorSkolen</span>
     </div>
-    <button id="ai-assist" class="floating-btn">AI Микс</button>
-    <div id="ai-window" class="ai-window">
-        <h3>AI Ассистент</h3>
-        <button id="create-mix">Создать микс</button>
-        <div id="preview"></div>
-        <button id="apply-mix">Применить</button>
-        <button id="close-ai">Закрыть</button>
+    <nav class="nav">
+      <a href="index.html" class="active">Словарь</a>
+      <a href="pages/grammar.html">Грамматика</a>
+      <a href="pages/verbs.html">Глаголы</a>
+      <a href="print.html">Печать</a>
+    </nav>
+    <div class="actions">
+      <button id="themeToggle" class="btn ghost" title="Тёмная/светлая тема">🌓</button>
+      <button id="printBtn" class="btn" title="Печать / PDF">🖨 Печать</button>
     </div>
-    <script src="script.js" async></script>
+  </header>
+
+  <section class="toolbar">
+    <input id="search" class="search" type="search" placeholder="Поиск: norsk / русская транскрипция / перевод" autocomplete="off" />
+    <div class="filters">
+      <select id="levelFilter" class="select">
+        <option value="">Все уровни</option>
+        <option value="A1">A1</option>
+        <option value="A2">A2</option>
+        <option value="B1">B1</option>
+        <option value="B2">B2</option>
+      </select>
+      <select id="topicFilter" class="select">
+        <option value="">Все темы</option>
+      </select>
+      <label class="chk"><input type="checkbox" id="onlyNew"/> Показать только невыученное</label>
+    </div>
+  </section>
+
+  <main class="grid">
+    <aside class="sidebar">
+      <nav id="topics" class="topics"></nav>
+      <div class="stat">Прогресс: <span id="progress">0/0</span></div>
+      <div class="card">
+        <h3>Режимы тренировки</h3>
+        <button class="btn full" id="flashcardsBtn">Карточки</button>
+        <button class="btn full" id="quizBtn">Тест (выбор)</button>
+        <button class="btn full" id="typingBtn">Диктант</button>
+      </div>
+    </aside>
+
+    <section class="content">
+      <div class="table-wrap">
+        <table class="table" id="wordsTable">
+          <thead>
+            <tr>
+              <th style="width: 28ch">Norsk</th>
+              <th style="width: 30ch">Русская транскрипция</th>
+              <th>Перевод</th>
+              <th>Уровень</th>
+              <th>Тема</th>
+              <th class="no-print" title="Прослушать">🔊</th>
+              <th class="no-print" title="Отметить как выучено">✓</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <dialog id="trainerModal" class="modal">
+    <form method="dialog" class="modal-body">
+      <header class="modal-header">
+        <h3 id="trainerTitle">Тренировка</h3>
+        <button class="btn ghost" value="close" aria-label="Закрыть">✕</button>
+      </header>
+      <section id="trainerContent" class="modal-content"></section>
+      <footer class="modal-footer">
+        <button class="btn" id="nextTask">Дальше →</button>
+      </footer>
+    </form>
+  </dialog>
+
+  <footer class="app-footer">
+    <small>© NorSkolen • Локальное сохранение • Offline-ready</small>
+  </footer>
+
+  <script type="module" src="app.js"></script>
 </body>
 </html>
