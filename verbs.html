@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8">
+  <title>Norwegian Verbs</title>
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+  <h1>Verbs</h1>
+  <div id="verbs-container"></div>
+  <script>
+    const verbs = [
+      { no: 'å være', ru: 'быть' },
+      { no: 'å ha', ru: 'иметь' },
+      { no: 'å gjøre', ru: 'делать' }
+    ];
+    const container = document.getElementById('verbs-container');
+    verbs.forEach(v => {
+      const div = document.createElement('div');
+      div.textContent = `${v.no} — ${v.ru}`;
+      container.appendChild(div);
+    });
+  </script>
+</body>
+</html>
