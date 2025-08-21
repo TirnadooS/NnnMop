@@ -1,37 +1,23 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="no">
 <head>
-    <meta charset="UTF-8">
-    <title>NorSkolen — Печать</title>
-    <link rel="stylesheet" href="print.css">
+<meta charset="UTF-8">
+<title>Norwegian Words Print</title>
+<link rel="stylesheet" href="print.css">
 </head>
 <body>
-    <table>
-        <thead>
-            <tr>
-                <th>Norsk</th>
-                <th>Транскрипция</th>
-                <th>Перевод</th>
-                <th>Уровень</th>
-                <th>Тема</th>
-            </tr>
-        </thead>
-        <tbody id="printBody"></tbody>
-    </table>
-    <script>
-        const words = JSON.parse(localStorage.getItem('words') || '[]');
-        const printBody = document.getElementById('printBody');
-        words.forEach(word => {
-            const row = document.createElement('tr');
-            row.innerHTML = `
-                <td>${word.norsk}</td>
-                <td>${word.transcription}</td>
-                <td>${word.translation}</td>
-                <td>${word.level}</td>
-                <td>${word.theme}</td>
-            `;
-            printBody.appendChild(row);
-        });
-    </script>
+  <h1>Norwegian Words</h1>
+  <div id="print-words"></div>
+  <script src="data.js"></script>
+  <script>
+    loadWords().then(() => {
+      const container = document.getElementById('print-words');
+      words.forEach(w => {
+        const div = document.createElement('div');
+        div.textContent = `${w.no} — ${w.ru}`;
+        container.appendChild(div);
+      });
+    });
+  </script>
 </body>
 </html>
