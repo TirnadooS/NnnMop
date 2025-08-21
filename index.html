@@ -1,70 +1,31 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="no">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NorSkolen — Норвежский язык A1–B2</title>
-    <link rel="stylesheet" href="styles.css">
-    <link rel="manifest" href="manifest.webmanifest">
-    <link rel="icon" href="assets/logo.svg">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Norwegian Trainer</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="manifest" href="manifest.webmanifest">
 </head>
 <body>
-    <header>
-        <h1>NorSkolen</h1>
-        <p>Изучение норвежского языка A1–B2</p>
-    </header>
-    <main>
-        <section class="filters">
-            <label>Уровень: 
-                <select id="levelFilter">
-                    <option value="all">Все</option>
-                    <option value="A1">A1</option>
-                    <option value="A2">A2</option>
-                    <option value="B1">B1</option>
-                    <option value="B2">B2</option>
-                </select>
-            </label>
-            <label>Тема: 
-                <select id="themeFilter">
-                    <option value="all">Все</option>
-                    <option value="приветствия">Приветствия</option>
-                    <option value="еда">Еда</option>
-                    <option value="путешествия">Путешествия</option>
-                    <option value="ежедневные фразы">Ежедневные фразы</option>
-                    <option value="семья">Семья</option>
-                    <option value="числа">Числа</option>
-                </select>
-            </label>
-            <button onclick="exportToPDF()">Экспорт в PDF</button>
-        </section>
-        <section class="progress">
-            <p>Прогресс: <span id="progress">0%</span></p>
-            <button onclick="showTrainer('flashcards')">Карточки</button>
-            <button onclick="showTrainer('quiz')">Тест</button>
-            <button onclick="showTrainer('typing')">Диктант</button>
-        </section>
-        <table id="vocabularyTable">
-            <thead>
-                <tr>
-                    <th>Norsk</th>
-                    <th>Транскрипция</th>
-                    <th>Перевод</th>
-                    <th>Уровень</th>
-                    <th>Тема</th>
-                    <th>Аудио</th>
-                    <th>Изучено</th>
-                </tr>
-            </thead>
-            <tbody id="vocabularyBody"></tbody>
-        </table>
-    </main>
-    <div id="trainerModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeTrainer()">&times;</span>
-            <div id="trainerContent"></div>
-        </div>
-    </div>
+  <header>
+    <img src="assets/logo.svg" alt="Logo" class="logo">
+    <h1>Norwegian Trainer</h1>
+  </header>
+  
+  <main>
+    <section id="trainer"></section>
+  </main>
+  
+  <footer>
+    <p>&copy; 2025 Norwegian Trainer</p>
+  </footer>
 
-    <script type="module" src="app.js"></script>
+  <script src="utils.js"></script>
+  <script src="storage.js"></script>
+  <script src="data.js"></script>
+  <script src="tts.js"></script>
+  <script src="trainer.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>
