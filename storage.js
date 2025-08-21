@@ -1,20 +1,10 @@
-export function loadProgress() {
-    const saved = localStorage.getItem('learnedWords');
-    if (saved) {
-        const learned = JSON.parse(saved);
-        learned.forEach(word => {
-            const checkbox = document.querySelector(`input[data-word="${word}"]`);
-            if (checkbox) checkbox.checked = true;
-        });
-    }
+const STORAGE_KEY = "norwegian_trainer_progress";
+
+function saveProgress(data) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
 }
 
-export function saveProgress() {
-    const learned = Array.from(document.querySelectorAll('input[type="checkbox"]:checked'))
-        .map(cb => cb.dataset.word);
-    localStorage.setItem('learnedWords', JSON.stringify(learned));
-}
-
-export function exportToPDF() {
-    window.print(); // Использует print.html и print.css
+function loadProgress() {
+  const data = localStorage.getItem(STORAGE_KEY);
+  return data ? JSON.parse(data) : {};
 }
